@@ -17,8 +17,8 @@ CREATE TABLE ingredients (
 );
 
 CREATE TABLE meal_ingredients (
-    meal_id INTEGER AUTO_INCREMENT NOT NULL,
-    ingredient_id INTEGER AUTO_INCREMENT NOT NULL,
+    meal_id INTEGER NOT NULL,
+    ingredient_id INTEGER NOT NULL,
     ingredient_qty INTEGER NOT NULL,
     FOREIGN KEY (meal_id) REFERENCES meal(meal_id),
     FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id),
@@ -26,3 +26,9 @@ CREATE TABLE meal_ingredients (
 );
 
 INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Tin of Beans', 'Heinz Beans');
+INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Bread', 'Hovis Loaf of Bread');
+
+INSERT INTO meal(meal_title, meal_desc) VALUES ('Beans on Toast', 'Quick and Easy beans on toast. Not massively filling but doesnt take long to make.');
+
+INSERT INTO meal_ingredients (meal_id, ingredient_id, ingredient_qty) VALUES (1, 1, 1);
+INSERT INTO meal_ingredients (meal_id, ingredient_id, ingredient_qty) VALUES (1, 2, 2);

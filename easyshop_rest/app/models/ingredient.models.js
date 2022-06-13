@@ -1,4 +1,4 @@
-const sql = require('.db')
+const sql = require('./db')
 
 const Ingredient = function(ingredient) {
     this.ingredientId = ingredient.ingredient_id
@@ -29,3 +29,28 @@ Ingredient.getIngredients = (result) => {
         result({kind: 'not_found'}, null)
     })
 }
+
+Ingredient.getIngredientById = (ingredientId, result) => {
+    const query = "select "
+    + "ingredient_id, ingredient_title, ingredient_desc, creation_date, updated_date "
+    + "from ingredients "
+    + "where ingredient_id = ?"
+
+    sql.query(query, ingredientId, (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
+            return
+        }
+
+        if (res.length) {
+            console.log("Found ingredient: " + res)
+            result(null, res[0])
+            return
+        }
+
+        result({kind: "not_found"}, null)
+    })
+}
+
+module.exports = Ingredient

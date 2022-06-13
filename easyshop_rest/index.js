@@ -14,12 +14,13 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions))
-app.options('*', corsOptions)
+app.options('*', cors())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 require('./app/routes/ingredient.routes')(app)
+require('./app/routes/meal.routes')(app)
 
 app.get('/', (req, res) => {
     res.send("Hello from EasyShop REST!")

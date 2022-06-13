@@ -1,0 +1,26 @@
+version: '3'
+services:
+  easyshop_rest:
+    container_name: easyshop_rest
+    build: easyshop_rest/.
+    command: npm run test
+    restart: on-failure
+    depends_on: 
+      - easyshop_db
+    links:
+      - easyshop_db
+    ports:
+      - "3000:3000"
+  easyshop_db:
+    image: mariadb:10.5.8
+    container_name: easyshop_db
+    command: --max_allowed_packet=32505856
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: easyshop
+    ports:
+      - "3306:3306"
+    volumes:
+      - esdbdata:/var/lib/mysql
+volumes:
+  esdbdata:

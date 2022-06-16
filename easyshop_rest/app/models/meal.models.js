@@ -31,4 +31,40 @@ Meal.getMealIngredients = (mealId, result) => {
     })
 }
 
+Meal.getAllMeals = (result) => {
+    const query = "select "
+    + "meal_id, meal_title, meal_desc, creation_date, updated_date "
+    + "from meal"
+
+    sql.query(query, (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
+            return
+        }
+
+        if (res.length) {
+            console.log("Found Meals: " + res)
+            result(null, res)
+            return
+        }
+
+        result({kind: "not_found"}, null)
+    })
+}
+
+Meal.insertNewMeal = (mealData, result) => {
+    const query = "insert into meal(meal_title, meal_desc) values (?, ?)"
+
+    sql.query(query, [mealData.meal_title, mealData.meal_desc], (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
+            return
+        }
+
+        result(null, res)
+    })
+}
+
 module.exports = Meal

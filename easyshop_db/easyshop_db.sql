@@ -25,6 +25,27 @@ CREATE TABLE meal_ingredients (
     PRIMARY KEY (meal_id, ingredient_id)
 );
 
+CREATE TABLE user (
+    user_id INTEGER AUTO_INCREMENT NOT NULL,
+    username VARCHAR(30) NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    user_password VARCHAR(30) NOT NULL,
+    PRIMARY KEY (username)
+);
+
+CREATE TABLE shopping_list (
+    shopping_list_id INTEGER AUTO_INCREMENT NOT NULL,
+    user_id INTEGER NOT NULL,
+    meal_id INTEGER NOT NULL,
+    ingredient_id INTEGER NOT NULL,
+    ingredient_qty_offset INTEGER DEFAULT 0 NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES user(user_id),
+    FOREIGN KEY (meal_id) REFERENCES meal(meal_id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id),
+    PRIMARY KEY (shopping_list_id, user_id, meal_id, ingredient_id)
+);
+
 INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Tin of Beans', 'Heinz Beans');
 INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Bread', 'Hovis Loaf of Bread');
 

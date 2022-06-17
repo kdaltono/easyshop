@@ -6,6 +6,7 @@ import './index.css';
 import { NavigationBar } from './components/navbar/navbar';
 import { Home } from './components/home/home';
 import { AddMeal } from './components/addmeal/addmeal';
+import { Meal } from './components/meal/meal'
 
 function Layout() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />}></Route>
                     <Route path="addmeal" element={<AddMeal />}></Route>
+                    <Route path="meal" element={<Meal />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

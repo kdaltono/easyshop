@@ -6,7 +6,7 @@ export class Home extends React.Component {
         super(props);
         this.state = {
             restMsg: '',
-            mealIngredients: '',
+            mealIngredients: [],
         }
     }
 
@@ -18,22 +18,23 @@ export class Home extends React.Component {
         })
 
         getMealIngredients('1').then((res) => {
-            this.setState({
-                mealIngredients: res.data
-            })
+            if (!res.data.err === 'ERR') {
+                this.setState({
+                    mealIngredients: Array.from(res.data)
+                });
+            }
         })
     }
 
     render() {
         return (<div>
-            <p>Hello World!</p>
             <p>Rest API message: {this.state.restMsg}</p>
-            <Meal mealIngredients = {this.state.mealIngredients}/>
+            <MealViewer mealIngredients = {this.state.mealIngredients}/>
         </div>)
     }
 }
 
-export class Meal extends React.Component {
+export class MealViewer extends React.Component {
     render() {
         if (this.props.mealIngredients.length > 0) {
             return (

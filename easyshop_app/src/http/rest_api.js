@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const url = 'http://127.0.0.1:3000/';
 
-const noConn = Promise.resolve({ data: 'No connection to server' });
+const noConn = Promise.resolve({ data: 'No connection to server', err: 'ERR' });
 
 export async function getRestMessage() {
     try {
@@ -28,5 +28,14 @@ export async function insertMeal(mealData) {
     } catch (err) {
         console.error(err);
         return noConn;
+    }
+}
+
+export async function getAllMeals() {
+    try {
+        return await axios.get(`${url}m/all`)
+    } catch (err) {
+        console.error(err);
+        return noConn
     }
 }

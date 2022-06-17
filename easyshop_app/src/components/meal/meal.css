@@ -1,0 +1,18 @@
+.meal-title {
+    font-weight: bold;
+}
+
+.meal-item-list {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.meal-item {
+    padding-bottom: 10px;
+}
+
+.card-media-image {
+    width: auto;
+}

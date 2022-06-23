@@ -9,9 +9,9 @@ const Ingredient = function(ingredient) {
 }
 
 Ingredient.getIngredients = (result) => {
-    const query = "select "
-    + "ingredient_id, ingredient_title, ingredient_desc, creation_date, updated_date "
-    + "from ingredients "
+    const query = "select " +
+	"i.ingredient_id, ic.ingredient_category_name, i.ingredient_title, i.ingredient_desc, i.creation_date, i.updated_date from " +
+	"ingredients i inner join ingredient_category ic on (i.ingredient_category_id = ic.ingredient_category_id) "
     
     sql.query(query, (err, res) => {
         if (err) {

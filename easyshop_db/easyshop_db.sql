@@ -7,8 +7,25 @@ CREATE TABLE meal (
     PRIMARY KEY (meal_id)
 );
 
+CREATE TABLE ingredient_category (
+	ingredient_category_id INTEGER AUTO_INCREMENT NOT NULL,
+    ingredient_category_name VARCHAR(40),
+    PRIMARY KEY (ingredient_category_id)
+);
+
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Eggs, milk and milk products');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Fats and oils');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Fruits');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Grain, nuts and baking products');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Herbs and spices');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Meat, sausages and fish');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Others');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Pasta, rice and pulses');
+INSERT INTO ingredient_category (ingredient_category_name) VALUES ('Vegetables');
+
 CREATE TABLE ingredients (
     ingredient_id INTEGER AUTO_INCREMENT NOT NULL,
+    ingredient_category_id INTEGER NOT NULL,
     ingredient_title VARCHAR(30) NOT NULL,
     ingredient_desc VARCHAR(100),
     creation_date DATETIME DEFAULT current_timestamp,

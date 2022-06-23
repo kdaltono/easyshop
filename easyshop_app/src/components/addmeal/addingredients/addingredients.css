@@ -1,0 +1,10 @@
+.add-ingredient-button {
+    font: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+.dialog-layout {
+    display: flex;
+    flex-direction: row;
+}

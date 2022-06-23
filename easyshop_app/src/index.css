@@ -1,6 +1,9 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
   margin: 0px;
   overflow-x: hidden;
+}
+
+* {
+  font-family: 'Montserrat', sans-serif;
 }
   

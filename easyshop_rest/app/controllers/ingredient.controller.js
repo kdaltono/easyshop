@@ -17,11 +17,11 @@ exports.getIngredientById = (req, res) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Could not find ingredient with ID: ${req.params.ingredientId}`
+                    err: `Could not find ingredient with ID: ${req.params.ingredientId}`
                 })
             } else {
                 res.status(500).send({
-                    message: `Error retrieving ingredient with ID: ${req.params.ingredientId}`
+                    err: `Error retrieving ingredient with ID: ${req.params.ingredientId}`
                 })
             }
         } else {

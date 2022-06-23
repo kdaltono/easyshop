@@ -18,7 +18,7 @@ export class Home extends React.Component {
         })
 
         getMealIngredients('1').then((res) => {
-            if (!res.data.err === 'ERR') {
+            if (!res.error) {
                 this.setState({
                     mealIngredients: Array.from(res.data)
                 });

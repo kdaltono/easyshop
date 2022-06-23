@@ -23,11 +23,11 @@ exports.getAllMeals = (req, res) => {
         if (err) {
             if (err.kind === "not_found") {
                 res.status(404).send({
-                    message: `Could not find Meals`
+                    err: `Could not find Meals`
                 })
             } else {
                 res.status(500).send({
-                    message: `Error retrieving meals`
+                    err: `Error retrieving meals`
                 })
             }
         } else {
@@ -40,7 +40,7 @@ exports.insertNewMeal = (req, res) => {
     Meal.insertNewMeal(req.body.mealData, (err, data) => {
         if (err) {
             res.status(404).send({
-                message: 'Could not insert Meal'
+                err: 'Could not insert Meal'
             })
         } else {
             res.send(data)

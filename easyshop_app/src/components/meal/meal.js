@@ -17,9 +17,11 @@ export class Meal extends React.Component {
 
     componentDidMount() {
         getAllMeals().then((res) => {
-            this.setState({
-                meals: Array.from(res.data)
-            })
+            if (!res.error) {
+                this.setState({
+                    meals: Array.from(res.data)
+                })
+            }
         })
     }
 
@@ -42,7 +44,7 @@ export class Meal extends React.Component {
             )
         } else {
             return (
-                <div></div>
+                <div>Could not load meals!</div>
             )
         }
     }

@@ -10,11 +10,19 @@ export class AddMeal extends React.Component {
         this.state = {
             meal_title: '',
             meal_desc: '',
+            meal_recipe: '',
+            selectedIngredients: []
         }
 
         this.mealTitleChange = this.mealTitleChange.bind(this);
         this.mealDescChange = this.mealDescChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    setSelectedIngredients(arr) {
+        this.setState({
+            selectedIngredients: arr
+        })
     }
 
     mealTitleChange(event) {
@@ -83,7 +91,8 @@ export class AddMeal extends React.Component {
 
                             <Typography variant="h5">Ingredients</Typography>
                             <Typography variant="p">Select the ingredients for this meal.</Typography>    
-                            <AddIngredients />
+                            <AddIngredients
+                                setSelectedIngredients={this.selectedIngredients} />
 
                             <input className='form-submit' type="submit" value="Submit" />
                         </form>

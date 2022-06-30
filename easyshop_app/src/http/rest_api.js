@@ -9,7 +9,10 @@ export async function getRestMessage() {
         return await axios.get(url);
     } catch (err) {
         console.error(err);
-        return noConn;
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }
 
@@ -18,7 +21,10 @@ export async function getMealIngredients(mealId) {
         return await axios.get(`${url}m/${mealId}`)
     } catch (err) {
         console.error(err);
-        return noConn;
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }
 
@@ -27,7 +33,10 @@ export async function insertMeal(mealData) {
         return await axios.post(`${url}m/`, { mealData: mealData });
     } catch (err) {
         console.error(err);
-        return noConn;
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }
 
@@ -36,7 +45,10 @@ export async function getAllMeals() {
         return await axios.get(`${url}m/all`)
     } catch (err) {
         console.error(err);
-        return noConn
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }
 
@@ -45,7 +57,10 @@ export async function getAllIngredientCategories() {
         return await axios.get(`${url}ic/all`)
     } catch (err) {
         console.error(err);
-        return noConn
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }
 
@@ -54,6 +69,21 @@ export async function getAllIngredients() {
         return await axios.get(`${url}i/all`)
     } catch (err) {
         console.error(err)
-        return noConn
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function insertMealIngredients(mealIngredientData) {
+    try {
+        return await axios.post(`${url}mi`, { mealIngredientData: mealIngredientData })
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
     }
 }

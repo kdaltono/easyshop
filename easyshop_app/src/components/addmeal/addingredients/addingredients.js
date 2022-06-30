@@ -1,10 +1,7 @@
 import React from 'react';
-import { Add, Delete } from '@mui/icons-material'
-import { Button, Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Drawer, IconButton } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem } from '@mui/material';
 import './addingredients.css'
 import { getAllIngredients } from '../../../http/rest_api';
-
-const ingredients = ['Bread', 'Beans', 'Cheese']
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props}/>
@@ -100,6 +97,8 @@ export class AddIngredientForm extends React.Component {
                                                 {ingredient.ingredient_title}
                                             </ListItem>
                                         )
+                                    } else {
+                                        return <div></div>
                                     }
                                 }))
                                 : (<ListItem>Test</ListItem>)

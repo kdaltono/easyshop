@@ -32,7 +32,7 @@ export class Meal extends React.Component {
                     {
                         this.state.meals.map((meal, index) => {
                             return (
-                                <div className='meal-item'>
+                                <div className='meal-item' key={meal.meal_title + meal.meal_id}>
                                     <MealItem 
                                         meal_title={meal.meal_title}
                                         meal_desc={meal.meal_desc}/>

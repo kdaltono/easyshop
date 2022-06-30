@@ -1,5 +1,5 @@
 import React from 'react';
-import { insertMeal } from '../../http/rest_api';
+import { insertMeal, insertMealIngredients } from '../../http/rest_api';
 import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
@@ -10,15 +10,21 @@ export class AddMeal extends React.Component {
         super(props);
         this.state = {
             meal_title: '',
+            meal_title_err: false,
             meal_desc: '',
+            meal_desc_err: false,
             meal_recipe: '',
+            meal_recipe_err: false,
             selectedIngredients: [],
-            open: false
+            selectedIngredients_error: false,
+            open: false,
         }
 
         this.mealTitleChange = this.mealTitleChange.bind(this);
         this.mealDescChange = this.mealDescChange.bind(this);
+        this.mealRecipeChange = this.mealRecipeChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.validateData = this.validateData.bind(this);
     }
 
     setSelectedIngredients(arr) {
@@ -40,17 +46,72 @@ export class AddMeal extends React.Component {
         })
     }
 
-    handleSubmit(event) {
-        insertMeal({
-            meal_title: this.state.meal_title,
-            meal_desc: this.state.meal_desc
-        }).then((res) => {
-            this.setState({
-                meal_title: '',
-                meal_desc: ''
-            });
+    mealRecipeChange(event) {
+        this.setState({
+            meal_recipe: event.target.value
         })
+    }
+
+    validateData() {
+        var isValid = true
+        if (this.state.meal_title.length === 0) {
+            isValid = false
+            this.setState({
+                meal_title_err: true
+            })
+        }
+
+        if (this.state.meal_desc.length === 0) {
+            isValid = false
+            this.setState({
+                meal_desc_err: true
+            })
+        }
+
+        if (this.state.meal_recipe.length === 0) {
+            isValid = false
+            this.setState({
+                meal_recipe_err: true
+            })
+        }
+
+        if (this.state.selectedIngredients.length === 0) {
+            isValid = false
+            this.setState({
+                selectedIngredients_error: true
+            })
+        }
+
+        return isValid
+    }
+
+    handleSubmit(event) {
         event.preventDefault();
+        if (this.validateData()) {
+            insertMeal({
+                meal_title: this.state.meal_title,
+                meal_desc: this.state.meal_desc
+                // Add Recipe stuff here too
+            }).then((res) => {
+                const meal_id = res.data.insertId;
+
+                var mealIngredients = []
+                this.state.selectedIngredients.forEach((ingredient) => {
+                    mealIngredients.push({meal_id: meal_id, ingredient_id: ingredient.ingredient_id, ingredient_qty: 1})
+                })
+
+                insertMealIngredients(mealIngredients).then((res) => {
+                    this.setState({
+                        meal_title: '',
+                        meal_desc: '',
+                        meal_recipe: '',
+                        selectedIngredients: []
+                    });
+                })
+
+                // Add a Snackbar to let the user know that it was all created successfully. Maybe move the contents of this function to a helper function as it is quite verbose
+            })
+        }   
     }
 
     showSelectedIngredients() {
@@ -77,7 +138,11 @@ export class AddMeal extends React.Component {
                 </div>
             )
         } else {
-            return <div></div>
+            return (
+                <div>
+                    {this.state.selectedIngredients_error || this.state.selectedIngredients.length > 0 ? 'Please add the meal\'s ingredients!' : ''}
+                </div>
+            )
         }
     }
 
@@ -115,21 +180,26 @@ export class AddMeal extends React.Component {
                         <Typography variant="h5">Add a New Meal</Typography>
                         <Typography variant="p">Add a new meal to add to your shopping lists. A meal consists of all of the ingredients.</Typography>    
                     </div>
+
                     <Divider/>
                     <div className='form-body'>
                         <form onSubmit={this.handleSubmit} className='form-layout'>
                             <div className='text-input-layout'>
                                 Meal Name
                                 <Input 
+                                    error = {this.state.meal_title_err}
                                     placeholder="Enter the meal's name" 
                                     value={this.state.meal_title} 
                                     onChange={this.mealTitleChange}
-                                    className='text-input'/>
+                                    className='text-input'
+                                    variant="standard"/>
                             </div>
 
                             <div className='text-input-layout'>
                                 Description
                                 <Input 
+                                    error = {this.state.meal_desc_err}
+                                    label = {this.state.meal_desc_err ? 'Error' : ''}
                                     placeholder="Enter a short description of the meal"
                                     value={this.state.meal_desc}
                                     onChange={this.mealDescChange}
@@ -139,7 +209,11 @@ export class AddMeal extends React.Component {
                             <div className='text-input-layout'>
                                 Recipe
                                 <Input 
+                                    error = {this.state.meal_recipe_err}
+                                    label = {''}
                                     placeholder="Enter the recipe for this meal"
+                                    value={this.state.meal_recipe}
+                                    onChange={this.mealRecipeChange}
                                     multiline
                                     className='text-input'/>
                             </div>

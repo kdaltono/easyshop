@@ -1,7 +1,8 @@
 import React from 'react';
 import { insertMeal } from '../../http/rest_api';
-import { Typography, Container, Divider, Input } from '@mui/material';
-import { AddIngredients } from './addingredients/addingredients';
+import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton } from '@mui/material';
+import { Add, Delete } from '@mui/icons-material'
+import { AddIngredientForm } from './addingredients/addingredients';
 import './addmeal.css'
 
 export class AddMeal extends React.Component {
@@ -11,7 +12,8 @@ export class AddMeal extends React.Component {
             meal_title: '',
             meal_desc: '',
             meal_recipe: '',
-            selectedIngredients: []
+            selectedIngredients: [],
+            open: false
         }
 
         this.mealTitleChange = this.mealTitleChange.bind(this);
@@ -23,6 +25,7 @@ export class AddMeal extends React.Component {
         this.setState({
             selectedIngredients: arr
         })
+        console.log('selectedIngredients updated: ' + JSON.stringify(this.state.selectedIngredients))
     }
 
     mealTitleChange(event) {
@@ -48,6 +51,60 @@ export class AddMeal extends React.Component {
             });
         })
         event.preventDefault();
+    }
+
+    showSelectedIngredients() {
+        if (this.state.selectedIngredients.length > 0) {
+            return (
+                <div>
+                    <List>  
+                        {this.state.selectedIngredients.map((ingredient, index) => {
+                            return (
+                                <ListItem 
+                                    key={ingredient + index}
+                                    secondaryAction={
+                                        <IconButton 
+                                            edge="end"
+                                            onClick={() => this.removeAtIndex(index)} >
+                                            <Delete />
+                                        </IconButton>
+                                    }>
+                                    {ingredient.ingredient_title}
+                                </ListItem>
+                            )
+                        })}
+                    </List>
+                </div>
+            )
+        } else {
+            return <div></div>
+        }
+    }
+
+    handleClickOpen = () => {
+        this.setState({
+            open: true
+        })
+    }
+
+    handleClose = (value) => {
+        // This setState function throws an error
+        this.setState({
+            open: false
+        })
+        if (value) {
+            this.state.selectedIngredients.push(value);
+        }
+    }
+
+    getOpen = () => {
+        return this.state.open
+    }
+
+    removeAtIndex = (i) => {
+        this.setState({
+            selectedIngredients: this.state.selectedIngredients.filter((_, index) => index !== i)
+        })
     }
 
     render() {
@@ -91,8 +148,20 @@ export class AddMeal extends React.Component {
 
                             <Typography variant="h5">Ingredients</Typography>
                             <Typography variant="p">Select the ingredients for this meal.</Typography>    
-                            <AddIngredients
-                                setSelectedIngredients={this.selectedIngredients} />
+                            <div>
+                                {this.showSelectedIngredients()}
+                                <Button 
+                                    variant='text' 
+                                    startIcon={<Add />} 
+                                    className='add-ingredient-button'
+                                    onClick={this.handleClickOpen}>
+                                    Add Ingredient
+                                </Button>
+                                <AddIngredientForm 
+                                    selectedValue={this.state.selectedValue}
+                                    open={this.getOpen}
+                                    onClose={this.handleClose}/>
+                            </div>
 
                             <input className='form-submit' type="submit" value="Submit" />
                         </form>

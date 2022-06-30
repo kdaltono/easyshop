@@ -10,87 +10,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props}/>
 })
 
-export class AddIngredients extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            open: false,
-            selectedValue: ingredients[0],
-            selectedIngredients: []
-        }
-    }
-
-    handleClickOpen = () => {
-        this.setState({
-            open: true
-        })
-    }
-
-    handleClose = (value) => {
-        this.setState({
-            open: false,
-        })
-        if (value) this.state.selectedIngredients.push(value);
-    }
-
-    getOpen = () => {
-        return this.state.open
-    }
-
-    removeAtIndex = (i) => {
-        this.setState({
-            selectedIngredients: this.state.selectedIngredients.filter((_, index) => index !== i)
-        })
-    }
-
-    showSelectedIngredients() {
-        if (this.state.selectedIngredients.length > 0) {
-            return (
-                <div>
-                    <List>  
-                        {this.state.selectedIngredients.map((ingredient, index) => {
-                            return (
-                                <ListItem 
-                                    key={ingredient + index}
-                                    secondaryAction={
-                                        <IconButton 
-                                            edge="end"
-                                            onClick={() => this.removeAtIndex(index)} >
-                                            <Delete />
-                                        </IconButton>
-                                    }>
-                                    {ingredient.ingredient_title}
-                                </ListItem>
-                            )
-                        })}
-                    </List>
-                </div>
-            )
-        } else {
-            return <div></div>
-        }
-    }
-
-    render() {
-        return (
-            <div>
-                {this.showSelectedIngredients()}
-                <Button 
-                    variant='text' 
-                    startIcon={<Add />} 
-                    className='add-ingredient-button'
-                    onClick={this.handleClickOpen}>
-                    Add Ingredient
-                </Button>
-                <AddIngredientForm 
-                    selectedValue={this.state.selectedValue}
-                    open={this.getOpen}
-                    onClose={this.handleClose}/>
-            </div>
-        )
-    }
-}
-
 const ingredientCategories = [
     {ingredient_category_id:1,ingredient_category_name:"Eggs, milk and milk products"},
     {ingredient_category_id:2,ingredient_category_name:"Fats and oils"},
@@ -104,11 +23,9 @@ const ingredientCategories = [
 ]
 
 export class AddIngredientForm extends React.Component {
-
     constructor(props) {
         super(props)
         this.state = {
-            onClose: this.props.onClose,
             selectedValue: this.props.selectedValue,
             open: this.props.open,
             ingredientCategories: [],
@@ -122,11 +39,11 @@ export class AddIngredientForm extends React.Component {
     }
 
     handleClose = () => {
-        this.state.onClose()
+        this.props.onClose()
     }
 
     handleListItemClick = (value) => {
-        this.state.onClose(value)
+        this.props.onClose(value)
     }
 
     setSelectedCategory = (category) => {

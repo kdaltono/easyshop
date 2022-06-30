@@ -63,8 +63,8 @@ CREATE TABLE shopping_list (
     PRIMARY KEY (shopping_list_id, user_id, meal_id, ingredient_id)
 );
 
-INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Tin of Beans', 'Heinz Beans');
-INSERT INTO ingredients(ingredient_title, ingredient_desc) VALUES ('Bread', 'Hovis Loaf of Bread');
+INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Tin of Beans', 'Heinz Beans');
+INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Bread', 'Hovis Loaf of Bread');
 
 INSERT INTO meal(meal_title, meal_desc) VALUES ('Beans on Toast', 'Quick and Easy beans on toast. Not massively filling but doesnt take long to make.');
 

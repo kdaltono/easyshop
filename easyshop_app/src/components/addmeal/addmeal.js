@@ -1,7 +1,7 @@
 import React from 'react';
 import { insertMeal, insertMealIngredients } from '../../http/rest_api';
-import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton } from '@mui/material';
-import { Add, Delete } from '@mui/icons-material'
+import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton, Snackbar } from '@mui/material';
+import { Add, Delete, Close } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
 import './addmeal.css'
 
@@ -108,7 +108,7 @@ export class AddMeal extends React.Component {
                         selectedIngredients: []
                     });
                 })
-
+                
                 // Add a Snackbar to let the user know that it was all created successfully. Maybe move the contents of this function to a helper function as it is quite verbose
             })
         }   
@@ -153,7 +153,6 @@ export class AddMeal extends React.Component {
     }
 
     handleClose = (value) => {
-        // This setState function throws an error
         this.setState({
             open: false
         })

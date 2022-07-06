@@ -8,6 +8,26 @@ const Meal = function(meal) {
     this.updatedDate = meal.updated_date
 }
 
+Meal.getMealData = (mealId, result) => {
+    const query = "select meal_id, meal_title, meal_desc, creation_date, meal_recipe, updated_date from meal where meal_id = ?"
+
+    sql.query(query, mealId, (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
+            return
+        }
+
+        if (res.length) {
+            console.log('Found meal data: ' + res)
+            result(null, res)
+            return
+        }
+
+        result({kind: 'not_found'}, null)
+    })
+}
+
 Meal.getMealIngredients = (mealId, result) => {
     const query = "select "
 	+ "m.meal_title, i.ingredient_title, mi.ingredient_qty "
@@ -54,9 +74,9 @@ Meal.getAllMeals = (result) => {
 }
 
 Meal.insertNewMeal = (mealData, result) => {
-    const query = "insert into meal(meal_title, meal_desc) values (?, ?)"
+    const query = "insert into meal(meal_title, meal_desc, meal_recipe) values (?, ?, ?)"
 
-    sql.query(query, [mealData.meal_title, mealData.meal_desc], (err, res) => {
+    sql.query(query, [mealData.meal_title, mealData.meal_desc, mealData.meal_recipe], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

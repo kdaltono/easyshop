@@ -7,7 +7,8 @@ import { NavigationBar } from './components/navbar/navbar';
 import { Home } from './components/home/home';
 import { AddMeal } from './components/addmeal/addmeal';
 import { Meal } from './components/meal/meal'
-import { MealViewer } from './components/meal/mealviewer/mealviewer'
+import { MealViewerMain } from './components/meal/mealviewer/mealviewer'
+import { MealList } from './components/meallist/meallist'
 
 function Layout() {
     return (
@@ -26,7 +27,8 @@ function App() {
                     <Route index element={<Home />}></Route>
                     <Route path="addmeal" element={<AddMeal />}></Route>
                     <Route path="meal" element={<Meal />}></Route>
-                    <Route path="getmeal/*" element={<MealViewer />}></Route>
+                    <Route path="getmeal/*" element={<MealViewerMain />}></Route>
+                    <Route path="createlist" element={<MealList />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

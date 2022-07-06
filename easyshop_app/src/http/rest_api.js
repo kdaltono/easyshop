@@ -87,3 +87,15 @@ export async function insertMealIngredients(mealIngredientData) {
         }
     }
 }
+
+export async function getAllMealData(mealId) {
+    try {
+        return await axios.get(`${url}ma/${mealId}`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}

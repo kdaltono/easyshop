@@ -1,7 +1,7 @@
 import React from 'react';
 import { insertMeal, insertMealIngredients } from '../../http/rest_api';
 import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton, Snackbar } from '@mui/material';
-import { Add, Delete, Close } from '@mui/icons-material'
+import { Add, Delete } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
 import './addmeal.css'
 
@@ -90,14 +90,14 @@ export class AddMeal extends React.Component {
         if (this.validateData()) {
             insertMeal({
                 meal_title: this.state.meal_title,
-                meal_desc: this.state.meal_desc
-                // Add Recipe stuff here too
+                meal_desc: this.state.meal_desc,
+                meal_recipe: this.state.meal_recipe
             }).then((res) => {
                 const meal_id = res.data.insertId;
 
                 var mealIngredients = []
                 this.state.selectedIngredients.forEach((ingredient) => {
-                    mealIngredients.push({meal_id: meal_id, ingredient_id: ingredient.ingredient_id, ingredient_qty: 1})
+                    mealIngredients.push({meal_id: meal_id, ingredient_id: ingredient.ingredient_id, ingredient_qty: ingredient.ingredient_qty})
                 })
 
                 insertMealIngredients(mealIngredients).then((res) => {
@@ -109,7 +109,7 @@ export class AddMeal extends React.Component {
                     });
                 })
                 
-                // Add a Snackbar to let the user know that it was all created successfully. Maybe move the contents of this function to a helper function as it is quite verbose
+                // TODO: Add a Snackbar to let the user know that it was all created successfully. Maybe move the contents of this function to a helper function as it is quite verbose
             })
         }   
     }
@@ -130,7 +130,7 @@ export class AddMeal extends React.Component {
                                             <Delete />
                                         </IconButton>
                                     }>
-                                    {ingredient.ingredient_title}
+                                    {ingredient.ingredient_qty} x {ingredient.ingredient_title}
                                 </ListItem>
                             )
                         })}
@@ -177,7 +177,7 @@ export class AddMeal extends React.Component {
                 <Container className='add-meal-form'>
                     <div className='form-header'>
                         <Typography variant="h5">Add a New Meal</Typography>
-                        <Typography variant="p">Add a new meal to add to your shopping lists. A meal consists of all of the ingredients.</Typography>    
+                        <Typography variant="p">Add a new meal to add to your shopping lists. A meal consists of: the name, a short description, the recipe, and all of the ingredients.</Typography>    
                     </div>
 
                     <Divider/>

@@ -9,6 +9,7 @@ import { AddMeal } from './components/addmeal/addmeal';
 import { Meal } from './components/meal/meal'
 import { MealViewerMain } from './components/meal/mealviewer/mealviewer'
 import { MealList } from './components/meallist/meallist'
+import { MealListViewerMain } from './components/meallist/meallistviewer/meallistviewer'
 
 function Layout() {
     return (
@@ -28,7 +29,8 @@ function App() {
                     <Route path="addmeal" element={<AddMeal />}></Route>
                     <Route path="meal" element={<Meal />}></Route>
                     <Route path="getmeal/*" element={<MealViewerMain />}></Route>
-                    <Route path="createlist" element={<MealList />}></Route>
+                    <Route path="lists" element={<MealList />}></Route>
+                    <Route path="list/*" element={<MealListViewerMain />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

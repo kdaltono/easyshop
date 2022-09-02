@@ -1,7 +1,8 @@
-import { Typography, Container, Box, Divider, List, ListItem, ListItemText } from "@mui/material";
+import { Add, CatchingPokemonSharp } from "@mui/icons-material";
+import { Typography, Container, Box, Divider, Menu, List, ListItem, ListItemText, Button, MenuItem } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { getAllMealData } from "../../../http/rest_api";
+import { getAllMealData, getAllActiveMealLists, insertNewMealListMeal } from "../../../http/rest_api";
 import './mealviewer.css'
 
 export function MealViewerMain() {
@@ -21,7 +22,9 @@ export class MealViewer extends React.Component {
         super(props)
         this.state = {
             mealData: [],
-            mealIngredients: []
+            mealIngredients: [],
+            activeMealLists: [],
+            anchorEl: undefined
         }
     }
 
@@ -31,6 +34,35 @@ export class MealViewer extends React.Component {
                 mealData: res.data.meal_data[0],
                 mealIngredients: res.data.meal_ingredients
             })
+        });
+        getAllActiveMealLists().then((res) => {
+            this.setState({
+                activeMealLists: res.data
+            })
+        })
+    }
+
+    addToShoppingList = (mealList) => {
+        console.log('Adding to shopping list... ' + mealList.meal_list_name + ' ' + mealList.meal_list_id)
+        // TODO: Actually add this item to the shopping list
+        insertNewMealListMeal({
+            meal_list_id: mealList.meal_list_id,
+            meal_id: this.props.mealId
+        }).then((res) => {
+            // Show a snackbar letting the user know it was successful
+        })
+    }
+
+    onAddToListMenuClose = (mealList) => {
+        this.addToShoppingList(mealList)
+        this.setState({
+            anchorEl: undefined
+        })
+    }
+
+    openAddToListMenu = (event) => {
+        this.setState({
+            anchorEl: event.currentTarget
         })
     }
 
@@ -41,6 +73,41 @@ export class MealViewer extends React.Component {
                 <Box sx={{
                     marginTop: '30px'
                 }}>
+                    <div className="meal-viewer-action">
+                        <Button
+                            className="add-meal-button"
+                            variant="contained"
+                            endIcon={<Add />}
+                            onClick={this.openAddToListMenu}>
+                            Add to List
+                        </Button>
+                        <Menu
+                            anchorEl={this.state.anchorEl}
+                            open={this.state.anchorEl ? true : false}>
+                            {
+                                (this.state.activeMealLists.length > 0 ? 
+                                this.state.activeMealLists.map((mealList) => {
+                                    return (
+                                        <MenuItem
+                                            onClick={() => this.onAddToListMenuClose(mealList)}
+                                            key={mealList.meal_list_id}>
+                                            {mealList.meal_list_name}
+                                        </MenuItem>
+                                    )
+                                })
+                                :
+                                (
+                                    <MenuItem
+                                        disabled>
+                                        No active meals!
+                                    </MenuItem>
+                                ))
+                            }
+                        </Menu>
+                    </div>
+
+                    <Divider />
+
                     <div className="meal-viewer-header">
                         <Typography variant="h5">
                             {this.state.mealData.meal_title}

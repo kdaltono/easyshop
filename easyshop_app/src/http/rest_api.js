@@ -88,9 +88,45 @@ export async function insertMealIngredients(mealIngredientData) {
     }
 }
 
+export async function insertNewMealListMeal(mealListMealData) {
+    try {
+        return await axios.post(`${url}mlm/i`, { mealListMealData: mealListMealData })
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
 export async function getAllMealData(mealId) {
     try {
         return await axios.get(`${url}ma/${mealId}`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function getAllActiveMealLists() {
+    try {
+        return await axios.get(`${url}ml/a`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function getMealListDataFromId(mealListId) {
+    try {
+        return await axios.get(`${url}ml/${mealListId}`)
     } catch (err) {
         console.error(err)
         return {

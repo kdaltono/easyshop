@@ -51,16 +51,12 @@ CREATE TABLE user (
     PRIMARY KEY (username)
 );
 
-CREATE TABLE shopping_list (
-    shopping_list_id INTEGER AUTO_INCREMENT NOT NULL,
-    user_id INTEGER NOT NULL,
-    meal_id INTEGER NOT NULL,
-    ingredient_id INTEGER NOT NULL,
-    ingredient_qty_offset INTEGER DEFAULT 0 NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES user(user_id),
-    FOREIGN KEY (meal_id) REFERENCES meal(meal_id),
-    FOREIGN KEY (ingredient_id) REFERENCES ingredients(ingredient_id),
-    PRIMARY KEY (shopping_list_id, user_id, meal_id, ingredient_id)
+create table meal_list (
+	meal_list_id INTEGER NOT NULL AUTO_INCREMENT,
+    meal_list_name VARCHAR(20),
+    creation_dstamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    is_active BOOLEAN DEFAULT TRUE,
+    PRIMARY KEY(meal_list_id)
 );
 
 INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Tin of Beans', 'Heinz Beans');

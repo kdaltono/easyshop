@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3edf8ec4-b154-40f6-8d2f-503081b5f27e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/meal/meal.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/meal/meal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/meal/mealviewer/mealviewer.css" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/meal/mealviewer/mealviewer.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/meal/mealviewer/mealviewer.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/meal/mealviewer/mealviewer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/meallist/meallist.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/meallist/meallist.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/navbar/navbar.css" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/navbar/navbar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/components/navbar/navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/components/navbar/navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/http/rest_api.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/http/rest_api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_app/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_app/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_db/easyshop_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_db/easyshop_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../easyshop_rest/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/../easyshop_rest/index.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2CTy6yY4E3yh7gmBFcW9OwldJ8Y" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3edf8ec4-b154-40f6-8d2f-503081b5f27e" name="Default Changelist" comment="" />
+      <created>1658840708375</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1658840708375</updated>
+    </task>
+    <servers />
+  </component>
+</project>

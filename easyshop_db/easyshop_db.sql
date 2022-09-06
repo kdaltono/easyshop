@@ -4,6 +4,7 @@ CREATE TABLE meal (
     meal_desc VARCHAR(100),
     creation_date DATETIME DEFAULT current_timestamp,
     updated_date DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
+    meal_recipe TEXT,
     PRIMARY KEY (meal_id)
 );
 
@@ -42,21 +43,25 @@ CREATE TABLE meal_ingredients (
     PRIMARY KEY (meal_id, ingredient_id)
 );
 
-CREATE TABLE user (
-    user_id INTEGER AUTO_INCREMENT NOT NULL,
-    username VARCHAR(30) NOT NULL,
-    first_name VARCHAR(30) NOT NULL,
-    last_name VARCHAR(30) NOT NULL,
-    user_password VARCHAR(30) NOT NULL,
-    PRIMARY KEY (username)
-);
-
 create table meal_list (
 	meal_list_id INTEGER NOT NULL AUTO_INCREMENT,
     meal_list_name VARCHAR(20),
     creation_dstamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
     PRIMARY KEY(meal_list_id)
+);
+
+create table meal_list (
+	meal_list_id INTEGER NOT NULL auto_increment,
+    meal_list_name VARCHAR(20),
+    creation_dstamp datetime NOT NULL default current_timestamp(),
+    is_active BOOLEAN default 1,
+    PRIMARY KEY (meal_list_id)
+);
+
+create table meal_list_meal (
+	meal_list_id INTEGER not null,
+    meal_id integer not null
 );
 
 INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Tin of Beans', 'Heinz Beans');

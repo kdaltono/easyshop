@@ -15,13 +15,18 @@ import com.kdaltono.main.report.JasperRunner;
 public class ReportAPI extends HttpServlet {
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		// The report is downloadable. There isn't any error checking currently to say if the MySQL connection
-		// is successful. It will just give you an empty PDF file
 		DBManager dbManager = new DBManager("mysql", "easyshop_db", "3306", "root", "1234");
+		//DBManager dbManager = new DBManager("mysql", "127.0.0.1", "3306", "root", "1234");
 		dbManager.startConnection();
 		
+		String mealListId = req.getParameter("mealListId");
+		if (mealListId == null) {
+			sendNullParameter(res.getWriter());
+			return;
+		}
+		
 		JasperRunner jr = new JasperRunner(dbManager);
-		byte[] pdfFile = jr.runReport();
+		byte[] pdfFile = jr.runReport(mealListId);
 		
 		if (pdfFile != null) {
 			OutputStream outStream = res.getOutputStream();
@@ -37,8 +42,15 @@ public class ReportAPI extends HttpServlet {
 			outStream.flush();
 			outStream.close();
 		} else {
-			PrintWriter out = res.getWriter();
-			out.println("<html><head><title>Hello World</title></head><body><p>pdfFile was equal to null. Check the logs for more details.</p></body></html>");
+			sendPdfIsNull(res.getWriter());
 		}
+	}
+	
+	private void sendNullParameter(PrintWriter out) {
+		out.println("<html><head><title>Hello World</title></head><body><p>mealListId parameter is missing. Check the logs for more details.</p></body></html>");
+	}
+	
+	private void sendPdfIsNull(PrintWriter out) {
+		out.println("<html><head><title>Hello World</title></head><body><p>pdfFile was equal to null. Check the logs for more details.</p></body></html>");
 	}
 }

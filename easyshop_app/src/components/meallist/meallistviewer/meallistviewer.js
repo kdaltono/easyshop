@@ -4,7 +4,7 @@ import { getMealListDataFromId } from '../../../http/rest_api';
 import { MealItem } from "../../meal/mealitem";
 import { getFormattedDate } from "../../../utils/dateformatting";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 export function MealListViewerMain() {
     let [searchParams, _] = useSearchParams();
@@ -28,6 +28,8 @@ export class MealListViewer extends React.Component {
     }
 
     componentDidMount() {
+        console.log(`MealListViewer: mealListId = ${this.props.mealListId}`)
+
         getMealListDataFromId(this.props.mealListId).then((res) => {
             if (!res.error) {
                 this.setState({
@@ -57,6 +59,12 @@ export class MealListViewer extends React.Component {
                         <Typography
                             variant='p'>
                             Creation Date: {getFormattedDate(this.state.mealListData.creation_dstamp)}
+                        </Typography>
+                        <Typography
+                            variant='p'
+                            component={Link}
+                            to={`/print?meallistid=${this.state.mealListData.meal_list_id}`}>
+                            Print List
                         </Typography>
                     </Box>
 

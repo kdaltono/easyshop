@@ -19,6 +19,8 @@ public class ReportAPI extends HttpServlet {
 		//DBManager dbManager = new DBManager("mysql", "127.0.0.1", "3306", "root", "1234");
 		dbManager.startConnection();
 		
+		res.addHeader("Access-Control-Allow-Origin", "*");
+		
 		String mealListId = req.getParameter("mealListId");
 		if (mealListId == null) {
 			sendNullParameter(res.getWriter());

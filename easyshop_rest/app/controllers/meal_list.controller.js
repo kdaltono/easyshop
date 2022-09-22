@@ -39,3 +39,13 @@ exports.getMealListMeals = (req, res) => {
         }
     })
 }
+
+exports.insertMealList = (req, res) => {
+    MealList.insertNewMealList(req.body.meal_list_name, (err, data) => {
+        if (err) {
+            errorResponseHandler(res, err, req.body.meal_list_name, 'Meal List')
+        } else {
+            res.send(data)
+        }
+    })
+}

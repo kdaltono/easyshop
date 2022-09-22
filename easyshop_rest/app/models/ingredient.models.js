@@ -52,4 +52,20 @@ Ingredient.getIngredientById = (ingredientId, result) => {
     })
 }
 
+Ingredient.insertNewIngredient = (ingredient, result) => {
+    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id) values (?, ?, ?)"
+
+    sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id], (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
+            return
+        }
+
+        console.log("Inserted ingredient")
+        result(null, res)
+        return
+    })
+}
+
 module.exports = Ingredient

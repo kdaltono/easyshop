@@ -1,4 +1,4 @@
-import { Add, CatchingPokemonSharp } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { Typography, Container, Box, Divider, Menu, List, ListItem, ListItemText, Button, MenuItem } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";

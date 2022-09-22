@@ -1,5 +1,5 @@
 import { Card, Typography, CardContent, CardActionArea } from "@mui/material";
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import { Container, Box } from "@mui/system";
 import { getAllActiveMealLists } from "../../http/rest_api";
 import { getFormattedDate } from "../../utils/dateformatting";
@@ -41,21 +41,26 @@ export class MealList extends React.Component {
 
                     <Box
                         marginTop='30px'>
-                    {(this.state.activeMealLists.length > 0 ? 
-                        <div>
-                            {
-                            this.state.activeMealLists.map((activeMealList) => {
-                                return (
-                                    <MealListElement 
-                                        meal_list={activeMealList}
-                                        key={activeMealList.meal_list_id}/>
-                                )
-                            })
-                            }
-                        </div>
-                        :
-                        <div>No Active Meals!</div>)
-                    }
+                        {(this.state.activeMealLists.length > 0 ? 
+                            <div>
+                                {
+                                this.state.activeMealLists.map((activeMealList) => {
+                                    return (
+                                        <MealListElement 
+                                            meal_list={activeMealList}
+                                            key={activeMealList.meal_list_id}/>
+                                    )
+                                })
+                                }
+                            </div>
+                            :
+                            <div>No Active Meals!</div>)
+                        }
+                    </Box>
+                    <Box
+                        component={Link}
+                        to={`/addlist`}>
+                        Add Shopping List
                     </Box>
                 </Box>
             </Container>

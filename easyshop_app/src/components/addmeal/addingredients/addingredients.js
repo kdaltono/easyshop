@@ -133,7 +133,7 @@ export class AddIngredientForm extends React.Component {
                                             return <div></div>
                                         }
                                     }))
-                                    : (<ListItem>Test</ListItem>)
+                                    : (<ListItem key="-1">Test</ListItem>)
                                 }
                             </List>
                         </div>

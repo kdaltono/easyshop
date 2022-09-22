@@ -3,4 +3,5 @@ module.exports = (app) => {
 
     app.get('/i/all', ingredients.getIngredients)
     app.get('/i/:ingredientId', ingredients.getIngredientById)
+    app.post('/i/', ingredients.insertIngredient)
 }

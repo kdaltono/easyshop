@@ -4,4 +4,5 @@ module.exports = (app) => {
     app.get('/ml/a', meallist.getActiveMealLists)
     app.get('/ml/:meal_list_id', meallist.getMealListDataFromId)
     app.get('/ml/m/:meal_list_id', meallist.getMealListMeals)
+    app.post('/ml', meallist.insertMealList)
 }

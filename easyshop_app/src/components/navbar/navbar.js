@@ -37,6 +37,14 @@ export class NavigationBar extends React.Component {
                             className='nav-bar-link'>
                             Add Meal
                         </Link>
+                        <Link
+                            href='addingr'
+                            underline="none"
+                            color="inherit"
+                            className='nav-bar-link'>
+                            Add Ingredients
+                        </Link>
+
                         <Button
                             href='/lists'
                             variant='contained'

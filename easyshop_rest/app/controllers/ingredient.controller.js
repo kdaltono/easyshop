@@ -29,3 +29,15 @@ exports.getIngredientById = (req, res) => {
         }
     })
 }
+
+exports.insertIngredient = (req, res) => {
+    Ingredient.insertNewIngredient(req.body.ingredient, (err, data) => {
+        if (err) {
+            res.status(500).send({
+                message: `Could not insert ingredient: ${req.body.ingredient.ingredient_title}`
+            })
+        } else {
+            res.send(data)
+        }
+    })
+}

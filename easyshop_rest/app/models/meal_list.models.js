@@ -6,7 +6,7 @@ const MealList = function(meal_list) {
 }
 
 MealList.getActiveMealLists = (result) => {
-    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml inner join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where is_active = TRUE group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active"
+    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where is_active = TRUE group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active order by ml.creation_dstamp desc"
 
     sql.query(query, (err, res) => {
         if (err) {
@@ -25,7 +25,7 @@ MealList.getActiveMealLists = (result) => {
 }
 
 MealList.getMealListDataFromId = (meal_list_id, result) => {
-    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml inner join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where ml.meal_list_id = 1 group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active"
+    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where ml.meal_list_id = ? group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active"
 
     sql.query(query, meal_list_id, (err, res) => {
         if (err) {
@@ -53,12 +53,23 @@ MealList.getMealListMeals = (meal_list_id, result) => {
             return
         }
 
-        if (res.length) {
-            result(null, res)
+        result(null, res)
+    })
+}
+
+MealList.insertNewMealList = (meal_list_name, result) => {
+    const query = "insert into meal_list (meal_list_name) values (?)"
+
+    sql.query(query, meal_list_name, (err, res) => {
+        if (err) {
+            console.log("Error: " + err)
+            result(err, null)
             return
         }
 
-        result({kind: 'not_found'}, null)
+        console.log("Inserted new Meal List");
+        result(null, res)
+        return
     })
 }
 

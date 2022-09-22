@@ -100,6 +100,30 @@ export async function insertNewMealListMeal(mealListMealData) {
     }
 }
 
+export async function insertNewIngredient(ingredientData) {
+    try {
+        return await axios.post(`${url}i/`, {ingredient: ingredientData})
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function insertNewMealList(meal_list_name) {
+    try {
+        return await axios.post(`${url}ml`, {meal_list_name: meal_list_name})
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
 export async function getAllMealData(mealId) {
     try {
         return await axios.get(`${url}ma/${mealId}`)

@@ -2,23 +2,11 @@ import React from 'react';
 import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Typography, TextField, Button } from '@mui/material';
 import './addingredients.css'
 import '../../../index.css'
-import { getAllIngredients } from '../../../http/rest_api';
+import { getAllIngredients, getAllIngredientCategories } from '../../../http/rest_api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props}/>
 })
-
-const ingredientCategories = [
-    {ingredient_category_id:1,ingredient_category_name:"Eggs, milk and milk products"},
-    {ingredient_category_id:2,ingredient_category_name:"Fats and oils"},
-    {ingredient_category_id:3,ingredient_category_name:"Vegetables"},
-    {ingredient_category_id:4,ingredient_category_name:"Fruits"},
-    {ingredient_category_id:5,ingredient_category_name:"Herbs and spices"},
-    {ingredient_category_id:6,ingredient_category_name:"Meat, sausages and fish"},
-    {ingredient_category_id:7,ingredient_category_name:"Others"},
-    {ingredient_category_id:8,ingredient_category_name:"Pasta, rice and pulses"},
-    {ingredient_category_id:9,ingredient_category_name:"Grain, nuts and baking products"}
-]
 
 export class AddIngredientForm extends React.Component {
     constructor(props) {
@@ -77,6 +65,13 @@ export class AddIngredientForm extends React.Component {
                 })
             }
         })
+        getAllIngredientCategories().then((res) => {
+            if (!res.error) {
+                this.setState({
+                    ingredientCategories: res.data
+                })
+            }
+        })
     }
 
     ingredientQtyChange = (event) => {
@@ -106,13 +101,17 @@ export class AddIngredientForm extends React.Component {
                                 <ListItem button onClick={() => this.setSelectedCategory('')} key={'all'}>
                                     All
                                 </ListItem>
-                                {ingredientCategories.map((category) => {
-                                    return (
-                                        <ListItem button onClick={() => this.setSelectedCategory(category)} key={category.ingredient_category_id}>
-                                            {category.ingredient_category_name}
-                                        </ListItem>
-                                    )
-                                })}
+                                {
+                                    this.state.ingredientCategories.length > 0 ?
+                                    (this.state.ingredientCategories.map((category) => {
+                                        return (
+                                            <ListItem button onClick={() => this.setSelectedCategory(category)} key={category.ingredient_category_id}>
+                                                {category.ingredient_category_name}
+                                            </ListItem>
+                                        )
+                                    }))
+                                    : (<ListItem key="-1">Test</ListItem>)
+                                }
                             </List>
                         </div>
 

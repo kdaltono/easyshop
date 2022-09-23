@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Select, MenuItem } from '@mui/material'
+import { Input, MenuItem, TextField } from '@mui/material'
 import { insertNewIngredient, getAllIngredientCategories } from "../../http/rest_api";
 
 export class AddIngredients extends React.Component {
@@ -79,8 +79,9 @@ export class AddIngredients extends React.Component {
                             onChange={this.ingredientDescriptionChange}/>
                         
                         <p>Ingredient Category ID</p>
-                        <Select
+                        <TextField
                             label="Category"
+                            select
                             onChange={this.ingredientCategoryIdChange}
                             value={this.state.ingredient_category_id}>
                             {
@@ -94,7 +95,7 @@ export class AddIngredients extends React.Component {
                                     )
                                 })                                
                             }
-                        </Select>
+                        </TextField>
 
                         <input type="submit" value="Submit"/>
                     </form>

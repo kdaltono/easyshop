@@ -14,10 +14,15 @@
     flex-direction: row;
 }
 
+.dialog-content {
+    overflow-y: hidden !important;
+}
+
 .ingredient-list {
     width: 50%;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .form-input {

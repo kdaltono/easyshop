@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Typography, TextField, Button } from '@mui/material';
+import { CreateIngredientsForm } from '../createingredients/createingredients';
 import './addingredients.css'
 import '../../../index.css'
 import { getAllIngredients, getAllIngredientCategories } from '../../../http/rest_api';
@@ -18,7 +19,8 @@ export class AddIngredientForm extends React.Component {
             selectedCategory: '',
             ingredients: [],
             selectedIngredient: [],
-            ingredient_qty: 0
+            ingredient_qty: 0,
+            addIngredientOpen: false
         }
 
         this.ingredientQtyChange = this.ingredientQtyChange.bind(this)
@@ -80,6 +82,26 @@ export class AddIngredientForm extends React.Component {
         })
     }
 
+    handleAddIngredientClickOpen = () => {
+        this.setState({
+            addIngredientOpen: true
+        })
+    }
+
+    handleAddIngredientClose = (value) => {
+        this.setState({
+            addIngredientOpen: false
+        })
+        if (value) {
+            console.log("Returned value: " + JSON.stringify(value))
+            this.state.ingredients.push(value)
+        }
+    }
+
+    getAddIngredientOpen = () => {
+        return this.state.addIngredientOpen
+    }
+
     render() {
         return (
             <Dialog
@@ -94,7 +116,8 @@ export class AddIngredientForm extends React.Component {
                     }
                 }}>
                 <DialogTitle>Ingredients</DialogTitle>
-                <DialogContent>
+                <DialogContent
+                    className='dialog-content'>
                     <div className='dialog-layout'>
                         <div className='category-list'>
                             <List>
@@ -161,6 +184,16 @@ export class AddIngredientForm extends React.Component {
                             </Button>
                         </div>
                     </div>
+                    
+                    <CreateIngredientsForm 
+                        open={() => this.getAddIngredientOpen()}
+                        onClose={this.handleAddIngredientClose}
+                        ingredientCategoryData={this.state.ingredientCategories}/>
+
+                    <Button
+                        onClick={() => this.handleAddIngredientClickOpen()}>
+                        Can't find what you're looking for?
+                    </Button>
                 </DialogContent>
             </Dialog>
         )

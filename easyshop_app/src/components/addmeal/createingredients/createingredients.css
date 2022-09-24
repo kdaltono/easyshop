@@ -1,0 +1,21 @@
+.form-layout {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.button-style {
+    margin-top: 20px;
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}

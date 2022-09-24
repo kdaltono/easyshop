@@ -1,6 +1,6 @@
 import React from 'react';
 import { insertMeal, insertMealIngredients } from '../../http/rest_api';
-import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton, Snackbar } from '@mui/material';
+import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
 import './addmeal.css'
@@ -17,7 +17,7 @@ export class AddMeal extends React.Component {
             meal_recipe_err: false,
             selectedIngredients: [],
             selectedIngredients_error: false,
-            open: false,
+            open: false
         }
 
         this.mealTitleChange = this.mealTitleChange.bind(this);
@@ -232,8 +232,9 @@ export class AddMeal extends React.Component {
                                 </Button>
                                 <AddIngredientForm 
                                     selectedValue={this.state.selectedValue}
-                                    open={this.getOpen}
-                                    onClose={this.handleClose}/>
+                                    open={() => this.getOpen()}
+                                    onClose={this.handleClose}
+                                    addIngredientOpen={() => this.handleAddIngredientClickOpen()}/>
                             </div>
 
                             <input className='form-submit' type="submit" value="Submit" />

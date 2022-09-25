@@ -31,6 +31,11 @@ export class AddIngredientForm extends React.Component {
     }
 
     handleClose = () => {
+        this.setState({
+            selectedIngredient: {},
+            selectedCategory: '',
+            ingredient_qty: 0
+        })
         this.props.onClose()
     }
 
@@ -38,13 +43,31 @@ export class AddIngredientForm extends React.Component {
         this.props.onClose(value)
     }
 
+    validateData() {
+        var isValid = true
+        if (Object.keys(this.state.selectedIngredient).length === 0) {
+            isValid = false
+        }
+        if (!this.state.ingredient_qty) {
+            isValid = false
+        }
+
+        return isValid
+    }
+
     handleSubmit = () => {
+        if (this.validateData()) {
+            this.props.onClose({...this.state.selectedIngredient, ingredient_qty: this.state.ingredient_qty})
+        } else {
+            // Handle data validation (forgot to select ingredient/qty/etc)
+            this.props.onClose()
+        }
+
         this.setState({
-            selectedIngredient: '',
+            selectedIngredient: {},
             selectedCategory: '',
             ingredient_qty: 0
         })
-        this.props.onClose({...this.state.selectedIngredient, ingredient_qty: this.state.ingredient_qty})
     }
 
     setSelectedIngredient = (ingredient) => {
@@ -93,7 +116,6 @@ export class AddIngredientForm extends React.Component {
             addIngredientOpen: false
         })
         if (value) {
-            console.log("Returned value: " + JSON.stringify(value))
             this.state.ingredients.push(value)
         }
     }

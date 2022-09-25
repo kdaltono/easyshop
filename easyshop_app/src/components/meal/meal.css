@@ -32,3 +32,13 @@
     align-items: center;
     width: 60vw;
 }
+
+.meal-item-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.meal-item-desc {
+    -webkit-line-clamp: 2;
+    word-break: break-all;
+}

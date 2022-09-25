@@ -43,8 +43,6 @@ export class MealViewer extends React.Component {
     }
 
     addToShoppingList = (mealList) => {
-        console.log('Adding to shopping list... ' + mealList.meal_list_name + ' ' + mealList.meal_list_id)
-        // TODO: Actually add this item to the shopping list
         insertNewMealListMeal({
             meal_list_id: mealList.meal_list_id,
             meal_id: this.props.mealId

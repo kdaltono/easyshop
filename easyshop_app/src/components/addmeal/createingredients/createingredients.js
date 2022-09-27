@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, Button, Typography, TextField, MenuItem } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Button, Typography, TextField, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
 import './createingredients.css'
 import { insertNewIngredient } from "../../../http/rest_api";
 import React from "react";
@@ -10,17 +10,19 @@ export class CreateIngredientsForm extends React.Component {
             open: this.props.open,
             ingredientTitle: '',
             ingredientDescription: '',
-            ingredientCategory: ''
+            ingredientCategory: '',
+            measuredAsLiquid: false
         }
 
         this.ingredientTitleChange = this.ingredientTitleChange.bind(this)
         this.ingredientDescriptionChange = this.ingredientDescriptionChange.bind(this)
         this.ingredientCategoryChange = this.ingredientCategoryChange.bind(this)
+        this.measuredAsLiquidChange = this.measuredAsLiquidChange.bind(this)
     }
 
     ingredientTitleChange = (event) => {
         this.setState({
-            ingredientTitle: event.target.value
+             ingredientTitle: event.target.value
         })
     }
 
@@ -36,11 +38,18 @@ export class CreateIngredientsForm extends React.Component {
         })
     }
 
+    measuredAsLiquidChange = (event) => {
+        this.setState({
+            measuredAsLiquid: event.target.checked
+        })
+    }
+
     clearValues() {
         this.setState({
             ingredientTitle: '',
             ingredientDescription: '',
-            ingredientCategory: ''
+            ingredientCategory: '',
+            measuredAsLiquid: false
         })
     }
 
@@ -55,7 +64,8 @@ export class CreateIngredientsForm extends React.Component {
         const ingredientData = {
             ingredient_title: this.state.ingredientTitle,
             ingredient_desc: this.state.ingredientDescription,
-            ingredient_category_id: this.state.ingredientCategory
+            ingredient_category_id: this.state.ingredientCategory,
+            is_measured_as_liquid: this.state.measuredAsLiquid
         }
 
         insertNewIngredient(ingredientData).then((res) => {
@@ -63,7 +73,8 @@ export class CreateIngredientsForm extends React.Component {
             const newIngredient = {
                 ingredient_category_id: ingredientData.ingredient_category_id,
                 ingredient_title: ingredientData.ingredient_title,
-                ingredient_id: res.data.insertId
+                ingredient_id: res.data.insertId,
+                is_measured_as_liquid: ingredientData.is_measured_as_liquid ? 1 : 0
             }
             this.clearValues()
             this.props.onClose(newIngredient);
@@ -144,6 +155,14 @@ export class CreateIngredientsForm extends React.Component {
                                     })                                
                                 }
                             </TextField>
+                        </div>
+
+                        <div className='input-section'>
+                            <FormControlLabel 
+                                control={<Checkbox />} 
+                                label="Measure Ingredient as Liquid" 
+                                value={this.state.measuredAsLiquid}
+                                onChange={this.measuredAsLiquidChange}/>
                         </div>
 
                         <div className='button-container'>

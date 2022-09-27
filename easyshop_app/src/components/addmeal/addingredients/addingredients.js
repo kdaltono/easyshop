@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Typography, TextField, Button } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Box, TextField, Button, DialogActions, MenuItem } from '@mui/material';
 import { CreateIngredientsForm } from '../createingredients/createingredients';
 import './addingredients.css'
 import '../../../index.css'
-import { getAllIngredients, getAllIngredientCategories } from '../../../http/rest_api';
+import { getAllIngredients, getAllIngredientCategories, getAllMeasures } from '../../../http/rest_api';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props}/>
@@ -18,21 +18,41 @@ export class AddIngredientForm extends React.Component {
             ingredientCategories: [],
             selectedCategory: '',
             ingredients: [],
-            selectedIngredient: [],
+            selectedIngredient: {
+                ingredient_title: '',
+                is_measured_as_liquid: ''
+            },
             ingredient_qty: 0,
-            addIngredientOpen: false
+            addIngredientOpen: false,
+            measures: [],
+            selectedMeasure: ''
         }
 
         this.ingredientQtyChange = this.ingredientQtyChange.bind(this)
+        this.measureChange = this.measureChange.bind(this)
     }
 
     componentDidMount() {
         this.getIngredients()
+        this.getMeasurements()
+    }
+
+    getMeasurements() {
+        getAllMeasures().then((res) => {
+            if (!res.error) {
+                this.setState({
+                    measures: res.data
+                })
+            }
+        })
     }
 
     handleClose = () => {
         this.setState({
-            selectedIngredient: {},
+            selectedIngredient: {
+                ingredient_title: '',
+                is_measured_as_liquid: ''
+            },
             selectedCategory: '',
             ingredient_qty: 0
         })
@@ -57,22 +77,32 @@ export class AddIngredientForm extends React.Component {
 
     handleSubmit = () => {
         if (this.validateData()) {
-            this.props.onClose({...this.state.selectedIngredient, ingredient_qty: this.state.ingredient_qty})
+            this.props.onClose({
+                ...this.state.selectedIngredient, 
+                ingredient_qty: this.state.ingredient_qty, 
+                measure_id: this.state.selectedMeasure, 
+                measure_abbr: this.state.measures.map((measure) => { if (measure.measure_id === this.state.selectedMeasure) return measure.measure_abbr })
+            })
         } else {
             // Handle data validation (forgot to select ingredient/qty/etc)
             this.props.onClose()
         }
 
         this.setState({
-            selectedIngredient: {},
             selectedCategory: '',
-            ingredient_qty: 0
+            ingredient_qty: 0,
+            selectedIngredient: {
+                ingredient_title: '',
+                is_measured_as_liquid: ''
+            }
         })
     }
 
     setSelectedIngredient = (ingredient) => {
         this.setState({
-            selectedIngredient: ingredient
+            selectedIngredient: ingredient,
+            selectedMeasure: '',
+            ingredient_qty: 0
         })
     }
 
@@ -102,6 +132,12 @@ export class AddIngredientForm extends React.Component {
     ingredientQtyChange = (event) => {
         this.setState({
             ingredient_qty: event.target.value
+        })
+    }
+
+    measureChange = (event) => {
+        this.setState({
+            selectedMeasure: event.target.value
         })
     }
 
@@ -173,8 +209,6 @@ export class AddIngredientForm extends React.Component {
                                                     {ingredient.ingredient_title}
                                                 </ListItem>
                                             )
-                                        } else {
-                                            return <div></div>
                                         }
                                     }))
                                     : (<ListItem key="-1">Test</ListItem>)
@@ -182,40 +216,101 @@ export class AddIngredientForm extends React.Component {
                             </List>
                         </div>
                     </div>
-                    <div className='form-input'>
-                        <Typography 
-                            variant="p"
-                            width={'50%'}>
-                            {this.state.selectedIngredient.ingredient_title}
-                        </Typography>
-                        <div className='qty-input-section'>
-                            <Typography
-                                variant='p'>
-                                Quantity:
-                            </Typography>
+                    <DialogActions
+                        sx={{
+                            paddingTop: "40px",
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between'
+                            }}>
+                            <TextField
+                                value={this.state.selectedIngredient.ingredient_title}
+                                InputProps={{
+                                    readOnly: true
+                                }}
+                                variant="filled"
+                                size="small"
+                                sx={{
+                                    width: '50%',
+                                    marginRight: '20px'
+                                }}>
+                            </TextField>
                             <TextField
                                 value={this.state.ingredient_qty}
                                 onChange={this.ingredientQtyChange}
-                                variant='standard'
-                                className='qty-input'>
+                                variant="filled"
+                                size="small"
+                                className='qty-input'
+                                type="number">
                             </TextField>
-                            <Button
-                                variant='contained'
-                                onClick={() => this.handleSubmit()}>
-                                Add
-                            </Button>
-                        </div>
-                    </div>
+                            <TextField
+                                label='Measurement'
+                                variant="filled"
+                                size="small"
+                                select
+                                sx={{
+                                    width: '30%',
+                                    marginLeft: '20px'
+                                }}
+                                value={this.state.selectedMeasure}
+                                onChange={this.measureChange}>
+                                {
+                                    this.state.measures.length > 0 && this.state.selectedIngredient.is_measured_as_liquid !== '' ?
+                                        this.state.measures.map((measure) => {
+                                            if (this.state.selectedIngredient.is_measured_as_liquid === measure.is_liquid_measure) {
+                                                return (
+                                                    <MenuItem
+                                                        key={measure.measure_id}
+                                                        value={measure.measure_id}>
+                                                        {`${measure.measure_name} (${measure.measure_abbr})`}
+                                                    </MenuItem>
+                                                )       
+                                            }
+                                        })
+                                    : 
+                                        <MenuItem
+                                            key="-1">
+                                                Select an Ingredient!
+                                        </MenuItem>
+                                }
+                            </TextField>
+                        </Box>
+                    </DialogActions>
                     
                     <CreateIngredientsForm 
                         open={() => this.getAddIngredientOpen()}
                         onClose={this.handleAddIngredientClose}
                         ingredientCategoryData={this.state.ingredientCategories}/>
 
-                    <Button
-                        onClick={() => this.handleAddIngredientClickOpen()}>
-                        Can't find what you're looking for?
-                    </Button>
+                    <Box
+                        sx={{
+                            marginTop: "auto",
+                            display: 'flex',
+                            flexDirection: 'column'
+                        }}>
+                        <Button
+                            variant='contained'
+                            onClick={() => this.handleSubmit()}
+                            sx={{
+                                marginTop: '20px'  
+                            }}>
+                            Add
+                        </Button>
+                        <Button
+                            variant='outlined'
+                            onClick={() => this.handleAddIngredientClickOpen()}
+                            sx={{
+                                marginTop: '20px'  
+                            }}>
+                            Can't find what you're looking for?
+                        </Button>
+                    </Box>
                 </DialogContent>
             </Dialog>
         )

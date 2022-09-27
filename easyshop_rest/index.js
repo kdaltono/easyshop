@@ -25,6 +25,7 @@ require('./app/routes/ingredient_category.routes')(app)
 require('./app/routes/meal_ingredients.routes')(app)
 require('./app/routes/meal_list.routes')(app)
 require('./app/routes/meal_list_meal.routes')(app)
+require('./app/routes/measure.routes')(app)
 
 app.get('/', (req, res) => {
     res.send("Hello from EasyShop REST!")

@@ -97,7 +97,7 @@ export class AddMeal extends React.Component {
 
                 var mealIngredients = []
                 this.state.selectedIngredients.forEach((ingredient) => {
-                    mealIngredients.push({meal_id: meal_id, ingredient_id: ingredient.ingredient_id, ingredient_qty: ingredient.ingredient_qty})
+                    mealIngredients.push({meal_id: meal_id, ingredient_id: ingredient.ingredient_id, ingredient_qty: ingredient.ingredient_qty, measure_id: ingredient.measure_id})
                 })
 
                 insertMealIngredients(mealIngredients).then((res) => {
@@ -130,7 +130,7 @@ export class AddMeal extends React.Component {
                                             <Delete />
                                         </IconButton>
                                     }>
-                                    {ingredient.ingredient_qty} x {ingredient.ingredient_title}
+                                    {ingredient.ingredient_qty}{ingredient.measure_abbr} x {ingredient.ingredient_title}
                                 </ListItem>
                             )
                         })}

@@ -9,7 +9,7 @@ const Ingredient = function(ingredient) {
 }
 
 Ingredient.getIngredients = (result) => {
-    const query = "select i.ingredient_id, i.ingredient_category_id, i.ingredient_title, i.ingredient_desc " +
+    const query = "select i.ingredient_id, i.ingredient_category_id, i.ingredient_title, i.ingredient_desc, i.is_measured_as_liquid " +
     "from ingredients i"
     
     sql.query(query, (err, res) => {
@@ -53,9 +53,9 @@ Ingredient.getIngredientById = (ingredientId, result) => {
 }
 
 Ingredient.insertNewIngredient = (ingredient, result) => {
-    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id) values (?, ?, ?)"
+    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id, is_measured_as_liquid) values (?, ?, ?, ?)"
 
-    sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id], (err, res) => {
+    sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id, ingredient.is_measured_as_liquid], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

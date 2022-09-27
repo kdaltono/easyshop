@@ -7,9 +7,9 @@ const MealIngredient = function(mealIngredient) {
 }
 
 MealIngredient.insertMealIngredient = (mealIngredient, result) => {
-    const query = "insert into meal_ingredients(meal_id, ingredient_id, ingredient_qty) values (?, ?, ?)"
+    const query = "insert into meal_ingredients(meal_id, ingredient_id, ingredient_qty, measure_id) values (?, ?, ?, ?)"
 
-    sql.query(query, [mealIngredient.meal_id, mealIngredient.ingredient_id, mealIngredient.ingredient_qty], (err, res) => {
+    sql.query(query, [mealIngredient.meal_id, mealIngredient.ingredient_id, mealIngredient.ingredient_qty, mealIngredient.measure_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

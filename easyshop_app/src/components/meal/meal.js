@@ -40,8 +40,7 @@ export class Meal extends React.Component {
     }
 
     onAddToListMenuClose = (mealList) => {
-        if (mealList) {
-            console.log("Adding Meal to List...")
+        if (mealList.meal_list_id) {
             this.addToShoppingList(mealList)
         }
 

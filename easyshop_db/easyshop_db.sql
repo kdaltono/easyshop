@@ -29,6 +29,7 @@ CREATE TABLE ingredients (
     ingredient_category_id INTEGER NOT NULL,
     ingredient_title VARCHAR(30) NOT NULL,
     ingredient_desc VARCHAR(100),
+    is_measured_as_liquid BOOLEAN DEFAULT TRUE,
     creation_date DATETIME DEFAULT current_timestamp,
     updated_date DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     PRIMARY KEY (ingredient_id)
@@ -63,6 +64,32 @@ create table meal_list_meal (
 	meal_list_id INTEGER not null,
     meal_id integer not null
 );
+
+create table measures (
+	measure_id INTEGER NOT NULL auto_increment,
+    measure_name VARCHAR(30),
+    measure_abbr VARCHAR(5),
+    is_liquid_measure BOOLEAN DEFAULT FALSE,
+    PRIMARY KEY (measure_id)
+);
+create table measure_conversion (
+	from_measure_id INTEGER NOT NULL,
+    multiplier DECIMAL(15,5) NOT NULL,
+    to_measure_id INTEGER NOT NULL,
+    UNIQUE KEY (from_measure_id, to_measure_id),
+    FOREIGN KEY (from_measure_id) references measure(measure_id),
+    FOREIGN KEY (to_measure_id) references measure(measure_id)
+);
+
+insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Liter", "L", TRUE);
+insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Milliliter", "ml", TRUE);
+insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (1, 1000, 2);
+insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (2, 0.001, 1);
+
+insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Kilogram", "kg", FALSE);
+insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Gram", "g", FALSE);
+insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (3, 1000, 4);
+insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (4, 0.001, 3);
 
 INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Tin of Beans', 'Heinz Beans');
 INSERT INTO ingredients(ingredient_category_id, ingredient_title, ingredient_desc) VALUES (1, 'Bread', 'Hovis Loaf of Bread');

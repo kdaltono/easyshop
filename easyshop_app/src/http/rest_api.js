@@ -76,6 +76,18 @@ export async function getAllIngredients() {
     }
 }
 
+export async function getAllMeasures() {
+    try {
+        return await axios.get(`${url}me`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
 export async function insertMealIngredients(mealIngredientData) {
     try {
         return await axios.post(`${url}mi`, { mealIngredientData: mealIngredientData })

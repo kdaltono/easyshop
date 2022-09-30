@@ -22,13 +22,16 @@ public class ReportAPI extends HttpServlet {
 		res.addHeader("Access-Control-Allow-Origin", "*");
 		
 		String mealListId = req.getParameter("mealListId");
+		String desiredLiquidMeasure = req.getParameter("dlm");
+		String desiredWeightMeasure = req.getParameter("dwm");
+		
 		if (mealListId == null) {
 			sendNullParameter(res.getWriter());
 			return;
 		}
 		
 		JasperRunner jr = new JasperRunner(dbManager);
-		byte[] pdfFile = jr.runReport(mealListId);
+		byte[] pdfFile = jr.runReport(mealListId, desiredLiquidMeasure, desiredWeightMeasure);
 		
 		if (pdfFile != null) {
 			OutputStream outStream = res.getOutputStream();

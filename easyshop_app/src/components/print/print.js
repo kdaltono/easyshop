@@ -1,8 +1,10 @@
 import React from "react";
+import { Box } from "@mui/system";
 import './print.css'
 import { useSearchParams } from "react-router-dom";
-import { getPdfBytes } from '../../http/pdf';
+import { getAllMeasures } from '../../http/rest_api';
 import { Document, Page, pdfjs } from 'react-pdf';
+import { MenuItem, TextField } from "@mui/material";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 export function PrintListMain() {
@@ -21,48 +23,89 @@ export class PrintList extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            pdfData: []
+            dlm: 1,
+            dwm: 3,
+            measures: []
         }
     }
 
     componentDidMount() {
-        getPdfBytes(this.props.mealListId).then(res => {
-            if (res.status !== 200) {
+        getAllMeasures().then((res) => {
+            if (!res.error) {
                 this.setState({
-                    pdfData: null
-                })
-                console.log("Error retrieving PDF Data!")
-                console.log(JSON.stringify(res))
-            } else {
-                var len = res.data.length;
-                var bytes = new Uint8Array(len);
-                for (var i = 0; i < len; i++) {
-                    bytes[i] = res.data.charCodeAt(i);
-                }
-
-                this.setState({
-                    pdfData: bytes.buffer
+                    measures: res.data
                 })
             }
         })
     }
 
-    render() {
-        // TODO: Enable CORS on the Java Servlet!
-        const tst = 2
+    handleLiquidMeasure = (event) => {
+        this.setState({
+            dlm: event.target.value
+        })
+    }
 
-        if (tst === 1) {
-            return (
+    handleWeightMeasure = (event) => {
+        this.setState({
+            dwm: event.target.value
+        })
+    }
+
+    render() {
+        return (
+            <Box>
+                <TextField
+                    select
+                    label="Liquid Measure"
+                    value={this.state.dlm}
+                    onChange={this.handleLiquidMeasure}>
+                    {
+                        this.state.measures.length > 0 ?
+                        this.state.measures.map((measure) => {
+                            if (measure.is_liquid_measure == 1) {
+                                return (
+                                    <MenuItem
+                                        key={measure.measure_id}
+                                        value={measure.measure_id}>
+                                        {measure.measure_abbr}
+                                    </MenuItem>
+                                )
+                            }
+                        })
+                        :
+                        <MenuItem
+                            key="-1">
+                            Error!
+                        </MenuItem>
+                    }
+                </TextField>
+                <TextField
+                    select
+                    label="Weight Measure"
+                    value={this.state.dwm}
+                    onChange={this.handleWeightMeasure}>
+                    {
+                        this.state.measures.length > 0 ?
+                        this.state.measures.map((measure) => {
+                            if (measure.is_liquid_measure == 0) {
+                                return (
+                                    <MenuItem
+                                        key={measure.measure_id}
+                                        value={measure.measure_id}>
+                                        {measure.measure_abbr}
+                                    </MenuItem>
+                                )
+                            }
+                        })
+                        :
+                        <MenuItem
+                            key="-1">
+                            Error!
+                        </MenuItem>
+                    }
+                </TextField>
                 <Document
-                    file = {this.state.pdfData}
-                    onLoadSuccess={() => console.log("Success Load!")}>
-                    <Page pageNumber={1} width={600} />
-                </Document>
-            )
-        } else {
-            return (
-                <Document
-                    file={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}`}
+                    file={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}&dlm=${this.state.dlm}&dwm=${this.state.dwm}`}
                     onLoadSuccess={() => console.log("Success Load!")}
                     width={600}>
                     <Page 
@@ -71,7 +114,7 @@ export class PrintList extends React.Component {
                         className="pdf-display">
                     </Page>
                 </Document>
-            )
-        }
+            </Box>
+        )
     }
 }

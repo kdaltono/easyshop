@@ -3,9 +3,8 @@ import { Box } from "@mui/system";
 import './print.css'
 import { useSearchParams } from "react-router-dom";
 import { getAllMeasures } from '../../http/rest_api';
-import { Document, Page, pdfjs } from 'react-pdf';
-import { MenuItem, TextField } from "@mui/material";
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+import { MenuItem, TextField, Button } from "@mui/material";
+import PdfViewer from './pdfviewer/pdfviewer'
 
 export function PrintListMain() {
     let [searchParams, _] = useSearchParams()
@@ -25,7 +24,9 @@ export class PrintList extends React.Component {
         this.state = {
             dlm: 1,
             dwm: 3,
-            measures: []
+            measures: [],
+            numberOfPages: 0,
+            pageNumber: 1
         }
     }
 
@@ -62,7 +63,7 @@ export class PrintList extends React.Component {
                     {
                         this.state.measures.length > 0 ?
                         this.state.measures.map((measure) => {
-                            if (measure.is_liquid_measure == 1) {
+                            if (measure.is_liquid_measure === 1) {
                                 return (
                                     <MenuItem
                                         key={measure.measure_id}
@@ -70,7 +71,7 @@ export class PrintList extends React.Component {
                                         {measure.measure_abbr}
                                     </MenuItem>
                                 )
-                            }
+                            } else return;
                         })
                         :
                         <MenuItem
@@ -87,7 +88,7 @@ export class PrintList extends React.Component {
                     {
                         this.state.measures.length > 0 ?
                         this.state.measures.map((measure) => {
-                            if (measure.is_liquid_measure == 0) {
+                            if (measure.is_liquid_measure === 0) {
                                 return (
                                     <MenuItem
                                         key={measure.measure_id}
@@ -95,7 +96,7 @@ export class PrintList extends React.Component {
                                         {measure.measure_abbr}
                                     </MenuItem>
                                 )
-                            }
+                            } else return;
                         })
                         :
                         <MenuItem
@@ -104,16 +105,13 @@ export class PrintList extends React.Component {
                         </MenuItem>
                     }
                 </TextField>
-                <Document
-                    file={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}&dlm=${this.state.dlm}&dwm=${this.state.dwm}`}
-                    onLoadSuccess={() => console.log("Success Load!")}
-                    width={600}>
-                    <Page 
-                        pageNumber={1} 
-                        width={600}
-                        className="pdf-display">
-                    </Page>
-                </Document>
+                <Button href={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}&dlm=${this.state.dlm}&dwm=${this.state.dwm}`}>
+                    Download!
+                </Button>
+                <PdfViewer 
+                    mealListId={this.props.mealListId}
+                    dlm={this.state.dlm}
+                    dwm={this.state.dwm}/>
             </Box>
         )
     }

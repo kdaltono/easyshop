@@ -1,6 +1,8 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Box, TextField, Button, DialogActions, MenuItem } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Slide, List, ListItem, Divider, Box, TextField, Button, DialogActions, MenuItem, InputAdornment } from '@mui/material';
 import { CreateIngredientsForm } from '../createingredients/createingredients';
+import SearchIcon from '@mui/icons-material/Search';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import './addingredients.css'
 import '../../../index.css'
 import { getAllIngredients, getAllIngredientCategories, getAllMeasures } from '../../../http/rest_api';
@@ -25,7 +27,8 @@ export class AddIngredientForm extends React.Component {
             ingredient_qty: 0,
             addIngredientOpen: false,
             measures: [],
-            selectedMeasure: ''
+            selectedMeasure: '',
+            ingredientFilter: ''
         }
 
         this.ingredientQtyChange = this.ingredientQtyChange.bind(this)
@@ -129,6 +132,12 @@ export class AddIngredientForm extends React.Component {
         })
     }
 
+    ingredientFilterChange = (event) => {
+        this.setState({
+            ingredientFilter: event.target.value
+        })
+    }
+
     ingredientQtyChange = (event) => {
         this.setState({
             ingredient_qty: event.target.value
@@ -156,8 +165,19 @@ export class AddIngredientForm extends React.Component {
         }
     }
 
+    applyFilters = (ingredient) => {
+        return (this.state.selectedCategory.ingredient_category_id === ingredient.ingredient_category_id || this.state.selectedCategory === '') &&
+            (this.state.ingredientFilter === '' || ingredient.ingredient_title.toLowerCase().includes(this.state.ingredientFilter.toLowerCase()))
+    }
+
     getAddIngredientOpen = () => {
         return this.state.addIngredientOpen
+    }
+
+    clearIngredientFilter = () => {
+        this.setState({
+            ingredientFilter: ''
+        })
     }
 
     render() {
@@ -173,7 +193,52 @@ export class AddIngredientForm extends React.Component {
                         height: '80vh'
                     }
                 }}>
-                <DialogTitle>Ingredients</DialogTitle>
+                <Box
+                    sx={{
+                        display: 'flex'
+                    }}>
+                    <Box
+                        sx={{
+                            width: '50%'
+                        }}>
+                        <DialogTitle
+                            sx={{
+                                paddingLeft: '20px'
+                            }}>
+                            Ingredients
+                        </DialogTitle>
+                    </Box>
+                    <Box
+                        sx={{
+                            width: '50%',
+                            height: '100%',
+                            paddingTop: '13px'
+                        }}>
+                        <TextField
+                            value={this.state.ingredientFilter}
+                            variant="outlined"
+                            size="small"
+                            onChange={this.ingredientFilterChange}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <SearchIcon />      
+                                    </InputAdornment>
+                                ),
+                                endAdornment: (
+                                    <InputAdornment 
+                                        position="end"
+                                        onClick={this.clearIngredientFilter}
+                                        sx={{
+                                            cursor: 'pointer'
+                                        }}>
+                                        <HighlightOffIcon />
+                                    </InputAdornment>
+                                )
+                            }}>
+                        </TextField>
+                    </Box>
+                </Box>
                 <DialogContent
                     className='dialog-content'>
                     <div className='dialog-layout'>
@@ -203,7 +268,7 @@ export class AddIngredientForm extends React.Component {
                                 {
                                     this.state.ingredients.length > 0 ?
                                     (this.state.ingredients.map((ingredient) => { 
-                                        if (this.state.selectedCategory.ingredient_category_id === ingredient.ingredient_category_id || this.state.selectedCategory === '') {
+                                        if (this.applyFilters(ingredient)) {
                                             return  (
                                                 <ListItem button onClick={() => this.setSelectedIngredient(ingredient)} key={ingredient.ingredient_id}>
                                                     {ingredient.ingredient_title}

@@ -22,7 +22,7 @@ export class AddIngredientForm extends React.Component {
             ingredients: [],
             selectedIngredient: {
                 ingredient_title: '',
-                is_measured_as_liquid: ''
+                measure_type_id: ''
             },
             ingredient_qty: 0,
             addIngredientOpen: false,
@@ -54,7 +54,7 @@ export class AddIngredientForm extends React.Component {
         this.setState({
             selectedIngredient: {
                 ingredient_title: '',
-                is_measured_as_liquid: ''
+                measure_type_id: ''
             },
             selectedCategory: '',
             ingredient_qty: 0
@@ -96,7 +96,7 @@ export class AddIngredientForm extends React.Component {
             ingredient_qty: 0,
             selectedIngredient: {
                 ingredient_title: '',
-                is_measured_as_liquid: ''
+                measure_type_id: ''
             }
         })
     }
@@ -326,9 +326,9 @@ export class AddIngredientForm extends React.Component {
                                 value={this.state.selectedMeasure}
                                 onChange={this.measureChange}>
                                 {
-                                    this.state.measures.length > 0 && this.state.selectedIngredient.is_measured_as_liquid !== '' ?
+                                    this.state.measures.length > 0 && this.state.selectedIngredient.measure_type_id !== '' ?
                                         this.state.measures.map((measure) => {
-                                            if (this.state.selectedIngredient.is_measured_as_liquid === measure.is_liquid_measure) {
+                                            if (this.state.selectedIngredient.measure_type_id === measure.measure_type_id) {
                                                 return (
                                                     <MenuItem
                                                         key={measure.measure_id}

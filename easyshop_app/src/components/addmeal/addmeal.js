@@ -184,7 +184,9 @@ export class AddMeal extends React.Component {
                     <div className='form-body'>
                         <form onSubmit={this.handleSubmit} className='form-layout'>
                             <div className='text-input-layout'>
-                                Meal Name
+                                <Typography variant='h6'>
+                                    Meal Name
+                                </Typography>
                                 <Input 
                                     error = {this.state.meal_title_err}
                                     placeholder="Enter the meal's name" 
@@ -195,7 +197,9 @@ export class AddMeal extends React.Component {
                             </div>
 
                             <div className='text-input-layout'>
-                                Description
+                                <Typography variant='h6'>
+                                    Description
+                                </Typography>
                                 <Input 
                                     error = {this.state.meal_desc_err}
                                     label = {this.state.meal_desc_err ? 'Error' : ''}
@@ -206,22 +210,9 @@ export class AddMeal extends React.Component {
                             </div>
 
                             <div className='text-input-layout'>
-                                Recipe
-                                <Input 
-                                    error = {this.state.meal_recipe_err}
-                                    label = {''}
-                                    placeholder="Enter the recipe for this meal"
-                                    value={this.state.meal_recipe}
-                                    onChange={this.mealRecipeChange}
-                                    multiline
-                                    className='text-input'/>
-                            </div>
-
-                            <Divider />
-
-                            <Typography variant="h5">Ingredients</Typography>
-                            <Typography variant="p">Select the ingredients for this meal.</Typography>    
-                            <div>
+                                <Typography variant='h6'>
+                                    Ingredients
+                                </Typography>
                                 {this.showSelectedIngredients()}
                                 <Button 
                                     variant='text' 
@@ -235,6 +226,20 @@ export class AddMeal extends React.Component {
                                     open={() => this.getOpen()}
                                     onClose={this.handleClose}
                                     addIngredientOpen={() => this.handleAddIngredientClickOpen()}/>
+                            </div>
+
+                            <div className='text-input-layout'>
+                                <Typography variant='h6'>
+                                    Recipe
+                                </Typography>
+                                <Input 
+                                    error = {this.state.meal_recipe_err}
+                                    label = {''}
+                                    placeholder="Enter the recipe for this meal"
+                                    value={this.state.meal_recipe}
+                                    onChange={this.mealRecipeChange}
+                                    multiline
+                                    className='text-input'/>
                             </div>
 
                             <input className='form-submit' type="submit" value="Submit" />

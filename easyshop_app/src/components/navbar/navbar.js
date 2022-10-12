@@ -14,7 +14,7 @@ export class NavigationBar extends React.Component {
                     <Toolbar className='nav-bar' variant="dense">
                         <Typography
                             className='nav-bar-title'>
-                            Easy Shop
+                            Since Sliced Bread
                         </Typography>
                         <Link 
                             href="/"

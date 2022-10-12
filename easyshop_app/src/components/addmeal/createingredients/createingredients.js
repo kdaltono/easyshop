@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, Button, Typography, TextField, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Button, Typography, TextField, MenuItem, FormControlLabel, Checkbox, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
 import './createingredients.css'
 import { insertNewIngredient } from "../../../http/rest_api";
 import React from "react";
@@ -11,13 +11,21 @@ export class CreateIngredientsForm extends React.Component {
             ingredientTitle: '',
             ingredientDescription: '',
             ingredientCategory: '',
-            measuredAsLiquid: false
+            measuredAsLiquid: false,
+            measurementType: 'L'
         }
 
         this.ingredientTitleChange = this.ingredientTitleChange.bind(this)
         this.ingredientDescriptionChange = this.ingredientDescriptionChange.bind(this)
         this.ingredientCategoryChange = this.ingredientCategoryChange.bind(this)
         this.measuredAsLiquidChange = this.measuredAsLiquidChange.bind(this)
+        this.measurementTypeChange = this.measurementTypeChange.bind(this)
+    }
+
+    measurementTypeChange = (event) => {
+        this.setState({
+            measurementType: event.target.value
+        })
     }
 
     ingredientTitleChange = (event) => {
@@ -49,7 +57,8 @@ export class CreateIngredientsForm extends React.Component {
             ingredientTitle: '',
             ingredientDescription: '',
             ingredientCategory: '',
-            measuredAsLiquid: false
+            measuredAsLiquid: false,
+            measurementType: 'L'
         })
     }
 
@@ -65,7 +74,7 @@ export class CreateIngredientsForm extends React.Component {
             ingredient_title: this.state.ingredientTitle,
             ingredient_desc: this.state.ingredientDescription,
             ingredient_category_id: this.state.ingredientCategory,
-            is_measured_as_liquid: this.state.measuredAsLiquid
+            measure_type_id: this.state.measurementType
         }
 
         insertNewIngredient(ingredientData).then((res) => {
@@ -74,7 +83,7 @@ export class CreateIngredientsForm extends React.Component {
                 ingredient_category_id: ingredientData.ingredient_category_id,
                 ingredient_title: ingredientData.ingredient_title,
                 ingredient_id: res.data.insertId,
-                is_measured_as_liquid: ingredientData.is_measured_as_liquid ? 1 : 0
+                measure_type_id: ingredientData.measure_type_id
             }
             this.clearValues()
             this.props.onClose(newIngredient);
@@ -158,11 +167,25 @@ export class CreateIngredientsForm extends React.Component {
                         </div>
 
                         <div className='input-section'>
-                            <FormControlLabel 
-                                control={<Checkbox />} 
-                                label="Measure Ingredient as Liquid" 
-                                value={this.state.measuredAsLiquid}
-                                onChange={this.measuredAsLiquidChange}/>
+                            <Typography
+                                variant='p'
+                                sx={{
+                                    marginBottom: '10px',
+                                    fontWeight: 'bold'
+                                }}>
+                                Measurement Type
+                            </Typography>
+                            <FormControl>
+                                <RadioGroup
+                                    row
+                                    defaultValue="L"
+                                    value={this.state.measurementType}
+                                    onChange={this.measurementTypeChange}>
+                                    <FormControlLabel value="L" control={<Radio />} label="Liquid" />
+                                    <FormControlLabel value="M" control={<Radio />} label="Mass" />
+                                    <FormControlLabel value="U" control={<Radio />} label="Unit" />
+                                </RadioGroup>
+                            </FormControl>
                         </div>
 
                         <div className='button-container'>

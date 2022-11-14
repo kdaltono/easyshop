@@ -52,10 +52,10 @@ Ingredient.getIngredientById = (ingredientId, result) => {
     })
 }
 
-Ingredient.insertNewIngredient = (ingredient, result) => {
-    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id, measure_type_id) values (?, ?, ?, ?)"
+Ingredient.insertNewIngredient = (ingredient, jwt_user_id, result) => {
+    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id, user_id, measure_type_id) values (?, ?, ?, ?, ?)"
 
-    sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id, ingredient.measure_type_id], (err, res) => {
+    sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id, jwt_user_id, ingredient.measure_type_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

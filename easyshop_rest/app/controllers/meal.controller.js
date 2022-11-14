@@ -1,4 +1,5 @@
 const Meal = require('../models/meal.models')
+const { getUserContentFromPayload } = require('../lib/utils')
 
 exports.getMealIngredients = (req, res) => {
     Meal.getMealIngredients(req.params.mealId, (err, data) => {
@@ -88,7 +89,9 @@ exports.getAllMeals = (req, res) => {
 }
 
 exports.insertNewMeal = (req, res) => {
-    Meal.insertNewMeal(req.body.mealData, (err, data) => {
+    const userContent = getUserContentFromPayload(req.header('Authorization'))
+
+    Meal.insertNewMeal(req.body.mealData, userContent.user_id, (err, data) => {
         if (err) {
             res.status(404).send({
                 err: 'Could not insert Meal'

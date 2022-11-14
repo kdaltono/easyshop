@@ -1,7 +1,8 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
-import ReactDOM from 'react-dom/client';
+import React from 'react'
+import { unstable_HistoryRouter as HistoryRouter, Routes, Route, Outlet } from 'react-router-dom'
+import ReactDOM from 'react-dom/client'
 
+import history from './utils/history'
 import './index.css';
 import { NavigationBar } from './components/navbar/navbar';
 import { Home } from './components/home/home';
@@ -12,6 +13,7 @@ import { MealList } from './components/meallist/meallist'
 import { MealListViewerMain } from './components/meallist/meallistviewer/meallistviewer'
 import { AddShoppingList } from './components/addshoppinglist/addshoppinglist'
 import { PrintListMain } from './components/print/print'
+import { Login } from './components/login/login'
 
 function Layout() {
     return (
@@ -24,7 +26,7 @@ function Layout() {
 
 function App() {
     return (
-        <BrowserRouter>
+        <HistoryRouter history={history}>
             <Routes>
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Home />}></Route>
@@ -35,9 +37,10 @@ function App() {
                     <Route path="list/*" element={<MealListViewerMain />}></Route>
                     <Route path="addlist" element={<AddShoppingList />}></Route>
                     <Route path="print/*" element={<PrintListMain />}></Route>
+                    <Route path="login" element={<Login />}></Route>
                 </Route>
             </Routes>
-        </BrowserRouter>
+        </HistoryRouter>
     )
 }
   

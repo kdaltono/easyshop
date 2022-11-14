@@ -1,4 +1,5 @@
 const Ingredient = require('../models/ingredient.models')
+const { getUserContentFromPayload } = require('../lib/utils')
 
 exports.getIngredients = (req, res) => {
     Ingredient.getIngredients((err, data) => {
@@ -31,7 +32,9 @@ exports.getIngredientById = (req, res) => {
 }
 
 exports.insertIngredient = (req, res) => {
-    Ingredient.insertNewIngredient(req.body.ingredient, (err, data) => {
+    const userContent = getUserContentFromPayload(req.header('Authorization'))
+
+    Ingredient.insertNewIngredient(req.body.ingredient, userContent.user_id, (err, data) => {
         if (err) {
             res.status(500).send({
                 message: `Could not insert ingredient: ${req.body.ingredient.ingredient_title}`

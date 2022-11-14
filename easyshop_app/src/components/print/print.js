@@ -2,7 +2,7 @@ import React from "react";
 import { Box } from "@mui/system";
 import './print.css'
 import { useSearchParams } from "react-router-dom";
-import { getAllMeasures } from '../../http/rest_api';
+import { getAllMeasures, getDefaultUnitMeasureId } from '../../http/rest_api';
 import { MenuItem, TextField, Button } from "@mui/material";
 import PdfViewer from './pdfviewer/pdfviewer'
 
@@ -24,6 +24,7 @@ export class PrintList extends React.Component {
         this.state = {
             dlm: 1,
             dwm: 3,
+            dum: -1,
             measures: [],
             numberOfPages: 0,
             pageNumber: 1
@@ -35,6 +36,14 @@ export class PrintList extends React.Component {
             if (!res.error) {
                 this.setState({
                     measures: res.data
+                })
+            }
+        })
+
+        getDefaultUnitMeasureId().then((res) => {
+            if (!res.error) {
+                this.setState({
+                    dum: res.data.measure_id
                 })
             }
         })
@@ -63,7 +72,7 @@ export class PrintList extends React.Component {
                     {
                         this.state.measures.length > 0 ?
                         this.state.measures.map((measure) => {
-                            if (measure.is_liquid_measure === 1) {
+                            if (measure.measure_type_id === 'L') {
                                 return (
                                     <MenuItem
                                         key={measure.measure_id}
@@ -88,7 +97,7 @@ export class PrintList extends React.Component {
                     {
                         this.state.measures.length > 0 ?
                         this.state.measures.map((measure) => {
-                            if (measure.is_liquid_measure === 0) {
+                            if (measure.measure_type_id === 'M') {
                                 return (
                                     <MenuItem
                                         key={measure.measure_id}
@@ -105,13 +114,14 @@ export class PrintList extends React.Component {
                         </MenuItem>
                     }
                 </TextField>
-                <Button href={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}&dlm=${this.state.dlm}&dwm=${this.state.dwm}`}>
+                <Button href={`http://127.0.0.1:8080/easyshop_rep/report?mealListId=${this.props.mealListId}&dlm=${this.state.dlm}&dwm=${this.state.dwm}&dum=${this.state.dum}`}>
                     Download!
                 </Button>
                 <PdfViewer 
                     mealListId={this.props.mealListId}
                     dlm={this.state.dlm}
-                    dwm={this.state.dwm}/>
+                    dwm={this.state.dwm}
+                    dum={this.state.dum}/>
             </Box>
         )
     }

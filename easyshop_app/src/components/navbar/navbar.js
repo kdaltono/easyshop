@@ -37,6 +37,13 @@ export class NavigationBar extends React.Component {
                             className='nav-bar-link'>
                             Add Meal
                         </Link>
+                        <Link
+                            href="/login"
+                            underline="none"
+                            color="inherit"
+                            className='nav-bar-link'>
+                            Login
+                        </Link>
 
                         <Button
                             href='/lists'

@@ -1,6 +1,7 @@
 package com.kdaltono.main;
 
 import java.io.IOException;
+
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
@@ -11,19 +12,46 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kdaltono.main.db.DBManager;
 import com.kdaltono.main.report.JasperRunner;
+import com.kdaltono.main.jwt.JWTVerify;
 
 public class ReportAPI extends HttpServlet {
 	
+	private void addCORSHeaders(HttpServletResponse res) {
+		res.addHeader("Access-Control-Allow-Origin", "http://localhost:2000");
+		res.addHeader("Access-Control-Allow-Credentials", "true");
+		res.addHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH");
+		res.addHeader("Access-Control-Allow-Headers", "Authorization, Content-Disposition, Content-Type, Content-Length");
+	}
+	
+	public void doOptions(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		addCORSHeaders(res);
+	}
+	
 	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+		System.out.println("doGet for Report API!");
+		
+		// Allow CORS:
+		addCORSHeaders(res);
+				
+		// Verify the JWT Token
+		String token = req.getHeader("Authorization");
+		
+		if (token == null) System.out.println("JWT Token is null! Invalid...");
+		
+		if (token == null || !JWTVerify.verifyJWTToken(token)) {
+			res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "The Token is not valid!");
+			return;
+		}
+		
 		DBManager dbManager = new DBManager("mysql", "easyshop_db", "3306", "root", "1234");
 		//DBManager dbManager = new DBManager("mysql", "127.0.0.1", "3306", "root", "1234");
 		dbManager.startConnection();
 		
-		res.addHeader("Access-Control-Allow-Origin", "*");
-		
 		String mealListId = req.getParameter("mealListId");
 		String desiredLiquidMeasure = req.getParameter("dlm");
 		String desiredWeightMeasure = req.getParameter("dwm");
+		String desiredUnitMeasure = req.getParameter("dum");
 		
 		if (mealListId == null) {
 			sendNullParameter(res.getWriter());
@@ -31,7 +59,7 @@ public class ReportAPI extends HttpServlet {
 		}
 		
 		JasperRunner jr = new JasperRunner(dbManager);
-		byte[] pdfFile = jr.runReport(mealListId, desiredLiquidMeasure, desiredWeightMeasure);
+		byte[] pdfFile = jr.runReport(mealListId, desiredLiquidMeasure, desiredWeightMeasure, desiredUnitMeasure);
 		
 		if (pdfFile != null) {
 			OutputStream outStream = res.getOutputStream();

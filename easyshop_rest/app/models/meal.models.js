@@ -73,10 +73,10 @@ Meal.getAllMeals = (result) => {
     })
 }
 
-Meal.insertNewMeal = (mealData, result) => {
-    const query = "insert into meal(meal_title, meal_desc, meal_recipe) values (?, ?, ?)"
+Meal.insertNewMeal = (mealData, jwt_user_id, result) => {
+    const query = "insert into meal(meal_title, meal_desc, user_id, meal_recipe) values (?, ?, ?, ?)"
 
-    sql.query(query, [mealData.meal_title, mealData.meal_desc, mealData.meal_recipe], (err, res) => {
+    sql.query(query, [mealData.meal_title, mealData.meal_desc, jwt_user_id, mealData.meal_recipe], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

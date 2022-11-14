@@ -22,8 +22,7 @@ public class JasperRunner {
 		this.dbManager = dbManager;
 	}
 	
-	public byte[] runReport(String mealListId, String dlm, String dwm) {
-		// Fix the jasper report. I think the database hasn't been updated in a while so the query isn't working
+	public byte[] runReport(String mealListId, String dlm, String dwm, String dum) {
 		try (InputStream in = getClass().getResourceAsStream("/Test_1.jasper")) {
 			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(in);
 			
@@ -31,6 +30,7 @@ public class JasperRunner {
 			params.put("meal_list_id", mealListId);
 			params.put("desired_liquid_measure", dlm);
 			params.put("desired_weight_measure", dwm);
+			params.put("desired_unit_measure", dum);
 			
 			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, dbManager.getDbConn());
 			

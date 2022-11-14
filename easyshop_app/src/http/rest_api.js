@@ -1,8 +1,48 @@
 import axios from 'axios';
+import history from '../utils/history'
+import { getToken, clearToken } from '../services/jwt_service'
+
+axios.interceptors.request.use(
+    config => {
+        let token = getToken()
+        if (token) {
+            config.headers['Authorization'] = token
+        }
+        return config
+    },
+    error => {
+        Promise.reject(error)
+    }
+)
+
+axios.interceptors.response.use(
+    response => {
+        return response
+    },
+    error => {
+        if (error.response.status === 401) {
+            clearToken()
+            history.push('/login')
+        }
+        return Promise.reject(error)
+    }
+)
 
 const url = 'http://127.0.0.1:3000/';
 
 export const noConn = Promise.resolve({ data: 'No connection to server', error: 'ERR' });
+
+export async function login(username, password) {
+    try {
+        return await axios.post(`${url}login`, { username: username, password: password })
+    } catch (err) {
+        console.error(err);
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
 
 export async function getRestMessage() {
     try {
@@ -163,6 +203,18 @@ export async function getAllActiveMealLists() {
 export async function getMealListDataFromId(mealListId) {
     try {
         return await axios.get(`${url}ml/${mealListId}`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function getDefaultUnitMeasureId() {
+    try {
+        return await axios.get(`${url}me/u`)
     } catch (err) {
         console.error(err)
         return {

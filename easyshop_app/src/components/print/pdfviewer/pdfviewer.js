@@ -1,3 +1,5 @@
+import { getToken } from '../../../services/jwt_service'
+
 import React, { useState } from "react";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
@@ -22,6 +24,7 @@ export default function PdfViewer(props) {
         setPageNumber(pageNumber - 1)
     }
 
+    // Might need to use a different PDF library to do this. The Authorization clearly isn't working - not sure what the problem is with it
     return (
         <Box
             display="flex"
@@ -32,7 +35,11 @@ export default function PdfViewer(props) {
             overflow="hidden">
             <Document
                 file={{
-                    url: `http://127.0.0.1:8080/easyshop_rep/report?mealListId=${props.mealListId}&dlm=${props.dlm}&dwm=${props.dwm}`
+                    url: `http://127.0.0.1:8080/easyshop_rep/report?mealListId=${props.mealListId}&dlm=${props.dlm}&dwm=${props.dwm}&dum=${props.dum}`,
+                    withCredentials: true,
+                    httpHeaders: {
+                        'Authorization': getToken()
+                    }
                 }}
                 onLoadSuccess={onDocumentLoadSuccess}>
                     <Page 

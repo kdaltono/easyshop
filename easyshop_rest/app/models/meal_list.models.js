@@ -5,10 +5,10 @@ const MealList = function(meal_list) {
     this.meal_id = meal_list.meal_id
 }
 
-MealList.getActiveMealLists = (result) => {
-    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where is_active = TRUE group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active order by ml.creation_dstamp desc"
+MealList.getActiveMealLists = (jwt_user_id, result) => {
+    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where is_active = TRUE and ml.user_id = ? group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active order by ml.creation_dstamp desc"
 
-    sql.query(query, (err, res) => {
+    sql.query(query, jwt_user_id, (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)
@@ -24,10 +24,10 @@ MealList.getActiveMealLists = (result) => {
     })
 }
 
-MealList.getMealListDataFromId = (meal_list_id, result) => {
-    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where ml.meal_list_id = ? group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active"
+MealList.getMealListDataFromId = (meal_list_id, jwt_user_id, result) => {
+    const query = "select ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active, count(mll.meal_id) as meal_list_size from meal_list ml left join meal_list_meal mll on (ml.meal_list_id = mll.meal_list_id) where ml.meal_list_id = ? and ml.user_id = ? group by ml.meal_list_id, ml.meal_list_name, ml.creation_dstamp, ml.is_active"
 
-    sql.query(query, meal_list_id, (err, res) => {
+    sql.query(query, [meal_list_id, jwt_user_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)
@@ -43,10 +43,10 @@ MealList.getMealListDataFromId = (meal_list_id, result) => {
     }) 
 }
 
-MealList.getMealListMeals = (meal_list_id, result) => {
-    const query = "select m.meal_id, m.meal_title, m.meal_desc from meal m inner join meal_list_meal mll on (mll.meal_id = m.meal_id) where mll.meal_list_id = ?"
+MealList.getMealListMeals = (meal_list_id, jwt_user_id, result) => {
+    const query = "select m.meal_id, m.meal_title, m.meal_desc from meal m inner join meal_list_meal mll on (mll.meal_id = m.meal_id) inner join meal_list ml on (mll.meal_list_id = ml.meal_list_id) where mll.meal_list_id = ? and ml.user_id = ?"
 
-    sql.query(query, meal_list_id, (err, res) => {
+    sql.query(query, [meal_list_id, jwt_user_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)
@@ -57,10 +57,10 @@ MealList.getMealListMeals = (meal_list_id, result) => {
     })
 }
 
-MealList.insertNewMealList = (meal_list_name, result) => {
-    const query = "insert into meal_list (meal_list_name) values (?)"
+MealList.insertNewMealList = (meal_list_name, jwt_user_id, result) => {
+    const query = "insert into meal_list (meal_list_name, user_id) values (?, ?)"
 
-    sql.query(query, meal_list_name, (err, res) => {
+    sql.query(query, [meal_list_name, jwt_user_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

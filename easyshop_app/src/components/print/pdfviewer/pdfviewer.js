@@ -24,7 +24,6 @@ export default function PdfViewer(props) {
         setPageNumber(pageNumber - 1)
     }
 
-    // Might need to use a different PDF library to do this. The Authorization clearly isn't working - not sure what the problem is with it
     return (
         <Box
             display="flex"

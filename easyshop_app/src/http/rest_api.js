@@ -44,6 +44,18 @@ export async function login(username, password) {
     }
 }
 
+export async function register(username, first_name, last_name, password) {
+    try {
+        return await axios.post(`${url}register`, { username: username, first_name: first_name, last_name: last_name, password: password })
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
 export async function getRestMessage() {
     try {
         return await axios.get(url);

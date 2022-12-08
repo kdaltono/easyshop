@@ -29,4 +29,28 @@ module.exports = app => {
             }
         })
     })
+
+    app.post('/register', function(req, res, data) {
+        console.log('Register request: ' + JSON.stringify(req.body))
+        User.checkUserDetailsExist(req.body.username, function(err, data1) {
+            if (err || (!data1 || data1 === undefined)) {
+                console.log("User details check failed... cancelling registration. " + JSON.stringify(data1))
+                res.status(401).json({ success: false, msg: `An error occured with details: ${req.body.username}`})
+            } else {
+                if (data.found_user === true) {
+                    console.log("Register: user has been found, not creating user.")
+                    res.status(401).json({ success: false, msg: 'User already exists' })
+                } else {
+                    // User doesn't exist, can create user...
+                    User.insertUser(req.body, function(err2, data2) {
+                        if (err2) {
+                            res.status(401).json({ success: false, msg: 'Error during user creation' })
+                        } else {
+                            res.status(200).json({ success: true })
+                        }
+                    })
+                }
+            }
+        })
+    })
 }

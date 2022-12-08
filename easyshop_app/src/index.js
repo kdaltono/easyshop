@@ -14,6 +14,7 @@ import { MealListViewerMain } from './components/meallist/meallistviewer/meallis
 import { AddShoppingList } from './components/addshoppinglist/addshoppinglist'
 import { PrintListMain } from './components/print/print'
 import { Login } from './components/login/login'
+import { Register } from './components/register/register'
 
 function Layout() {
     return (
@@ -38,6 +39,7 @@ function App() {
                     <Route path="addlist" element={<AddShoppingList />}></Route>
                     <Route path="print/*" element={<PrintListMain />}></Route>
                     <Route path="login" element={<Login />}></Route>
+                    <Route path="register" element={<Register />}></Route>
                 </Route>
             </Routes>
         </HistoryRouter>

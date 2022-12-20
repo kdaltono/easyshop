@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { setKey, setLoggedIn } from "../../features/user/userSlice"
+import { setKey, setLoggedIn, setUserId, setFullName } from "../../features/user/userSlice"
 import { Button, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { login } from '../../http/rest_api'
@@ -24,11 +24,15 @@ export function LoginBase() {
     const key = useSelector((state) => state.user.apiKey)
     const dispatch = useDispatch()
     const setApiKey = (value) => { dispatch(setKey(value)) }
+    const setRUserId = (value) => { dispatch(setUserId(value)) }
+    const setRFullName = (value) => { dispatch(setFullName(value)) }
 
     return (
         <Login 
             apiKey={key}
             setKey={setApiKey}
+            setUserId={setRUserId}
+            setFullName={setRFullName}
             setLoggedIn={() => dispatch(setLoggedIn())}/>
     )
 }
@@ -60,10 +64,10 @@ export class Login extends React.Component {
 
     submit = (event) => {
         login(this.state.username, sha256(this.state.password).toUpperCase()).then((res) => {
-
-            // THIS DOESN'T SEEM TO WORK. this.props.setKey is not a function
             console.log("React Redux API Key: " + this.props.apiKey)
             this.props.setKey(res.data.token)
+            this.props.setUserId(res.data.user_id)
+            this.props.setFullName(res.data.full_name)
             this.props.setLoggedIn()
 
             setToken(res.data.token)

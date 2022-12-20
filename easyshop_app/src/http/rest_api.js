@@ -36,9 +36,10 @@ export async function login(username, password) {
     try {
         return await axios.post(`${url}login`, { username: username, password: password })
     } catch (err) {
-        console.error(err);
         return {
             data: err.message,
+            status: err.response.status,
+            code: err.code,
             error: 'ERR'
         }
     }

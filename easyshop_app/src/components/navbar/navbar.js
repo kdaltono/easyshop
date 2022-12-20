@@ -1,56 +1,93 @@
 import React from 'react';
-import './navbar.css'
-import { AppBar, Toolbar, Typography, Link, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Link, Button, Box } from '@mui/material';
 
 export class NavigationBar extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+
     render() {
         return this.renderNavBar()
     }
 
     renderNavBar() {
+        const titleStyle = {
+            fontWeight: 'bolder',
+            fontSize: '16px',
+            color: 'white',
+            fontFamily: 'Montserrat, sans-serif'
+        }
+
+        const linkStyle = {
+            fontWeight: 'bold',
+            color: 'white',
+            paddingLeft: '15px'
+        }
+
+        const boxStyle = {
+            marginLeft: 'auto',
+            marginRight: '30px'
+        }
+
         return (
             <div>
-                <AppBar position="static">
-                    <Toolbar className='nav-bar' variant="dense">
+                <AppBar 
+                    position="static"
+                    sx={{
+                        backgroundColor: '#849324'
+                    }}>
+                    <Toolbar 
+                        sx={{
+                            width: '100% !important',
+                            height: '40px',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center'
+                        }}
+                        variant="dense">
                         <Typography
-                            className='nav-bar-title'>
+                            sx={titleStyle}>
                             Since Sliced Bread
                         </Typography>
                         <Link 
                             href="/"
                             underline="none"
                             color="inherit"
-                            className='nav-bar-link'>
+                            sx={linkStyle}>
                             Home
                         </Link>
                         <Link 
                             href="/meal"
                             underline="none"
                             color="inherit"
-                            className='nav-bar-link'>
+                            sx={linkStyle}>
                             Meals
                         </Link>
                         <Link 
                             href="/addmeal"
                             underline="none"
                             color="inherit"
-                            className='nav-bar-link'>
+                            sx={linkStyle}>
                             Add Meal
                         </Link>
                         <Link
                             href="/login"
                             underline="none"
                             color="inherit"
-                            className='nav-bar-link'>
+                            sx={linkStyle}>
                             Login
                         </Link>
 
-                        <Button
-                            href='/lists'
-                            variant='contained'
-                            className='nav-bar-link'>
-                            Shopping Lists
-                        </Button>
+                        <Box
+                            sx={boxStyle}>
+                            <Button
+                                href='/lists'
+                                variant='contained'
+                                sx={linkStyle}
+                                style={{ display: !this.props.loggedIn ? 'none' : undefined }}>
+                                Shopping Lists
+                            </Button>
+                        </Box>
                     </Toolbar>
                 </AppBar>
             </div>

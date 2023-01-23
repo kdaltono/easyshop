@@ -1,6 +1,7 @@
 import axios from 'axios';
 import history from '../utils/history'
 import { getToken, clearToken } from '../services/jwt_service'
+import StateLoader from '../features/user/stateloader';
 
 axios.interceptors.request.use(
     config => {
@@ -21,6 +22,7 @@ axios.interceptors.response.use(
     },
     error => {
         if (error.response.status === 401) {
+            StateLoader.clearStore()
             clearToken()
             history.push('/login')
         }
@@ -29,6 +31,7 @@ axios.interceptors.response.use(
 )
 
 const url = 'http://127.0.0.1:3000/';
+const imgUploadUrl = 'http://localhost:5001/easyshop_imagehost/image?reqfn='
 
 export const noConn = Promise.resolve({ data: 'No connection to server', error: 'ERR' });
 
@@ -228,6 +231,24 @@ export async function getMealListDataFromId(mealListId) {
 export async function getDefaultUnitMeasureId() {
     try {
         return await axios.get(`${url}me/u`)
+    } catch (err) {
+        console.error(err)
+        return {
+            data: err.message,
+            error: 'ERR'
+        }
+    }
+}
+
+export async function uploadImage(mealId, imageData, imageName) {
+    try {
+        var formData = new FormData()
+        formData.append("image", imageData)
+        return await axios.post(`${imgUploadUrl}${imageName}&mealId=${mealId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
     } catch (err) {
         console.error(err)
         return {

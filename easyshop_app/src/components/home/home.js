@@ -1,26 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getRestMessage } from '../../http/rest_api';
+import { useSelector } from 'react-redux';
 
-export class Home extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            restMsg: '',
-            mealIngredients: [],
-        }
-    }
+export function Home(props) {
+    const [restMsg, setRestMsg] = useState(0)
+    const first_name = useSelector((state) => state.user.first_name)
 
-    componentDidMount() {
+    useEffect(() => {
         getRestMessage().then((res) => {
-            this.setState({
-                restMsg: res.data
-            });
+            setRestMsg(res.data)
         })
-    }
+    }, [])
 
-    render() {
-        return (<div>
-            <p>Rest API message: {this.state.restMsg}</p>
-        </div>)
-    }
+    return (
+        <div>
+            <p>Rest API Message: {restMsg}</p>
+            <p>Welcome {first_name}!</p>
+        </div>
+    )
 }

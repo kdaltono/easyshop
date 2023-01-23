@@ -1,7 +1,7 @@
 import React from 'react';
-import { insertMeal, insertMealIngredients } from '../../http/rest_api';
-import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton } from '@mui/material';
-import { Add, Delete } from '@mui/icons-material'
+import { insertMeal, insertMealIngredients, uploadImage } from '../../http/rest_api';
+import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton, Box } from '@mui/material';
+import { Add, Delete, InsertPhoto } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
 import './addmeal.css'
 
@@ -17,7 +17,9 @@ export class AddMeal extends React.Component {
             meal_recipe_err: false,
             selectedIngredients: [],
             selectedIngredients_error: false,
-            open: false
+            open: false,
+            file: false,
+            fileURL: ''
         }
 
         this.mealTitleChange = this.mealTitleChange.bind(this);
@@ -25,6 +27,7 @@ export class AddMeal extends React.Component {
         this.mealRecipeChange = this.mealRecipeChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validateData = this.validateData.bind(this);
+        this.handleFileChosen = this.handleFileChosen.bind(this);
     }
 
     setSelectedIngredients(arr) {
@@ -32,6 +35,13 @@ export class AddMeal extends React.Component {
             selectedIngredients: arr
         })
         console.log('selectedIngredients updated: ' + JSON.stringify(this.state.selectedIngredients))
+    }
+
+    handleFileChosen(selectedFile) {
+        this.setState({
+            file: selectedFile,
+            fileURL: URL.createObjectURL(selectedFile)
+        })
     }
 
     mealTitleChange(event) {
@@ -108,10 +118,20 @@ export class AddMeal extends React.Component {
                         selectedIngredients: []
                     });
                 })
-                
+
+                if (this.state.file) {
+                    console.log("Uploading image")
+                    uploadImage(meal_id, this.state.file, this.state.file.name).then((res) => {
+                        console.log("Image upload completed. Response: " + JSON.stringify(res))
+                        this.setState({
+                            fileURL: '',
+                            file: false
+                        })
+                    })
+                }
                 // TODO: Add a Snackbar to let the user know that it was all created successfully. Maybe move the contents of this function to a helper function as it is quite verbose
             })
-        }   
+        }
     }
 
     showSelectedIngredients() {
@@ -183,6 +203,38 @@ export class AddMeal extends React.Component {
                     <Divider/>
                     <div className='form-body'>
                         <form onSubmit={this.handleSubmit} className='form-layout'>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center"
+                                }}>
+                                {this.state.file && 
+                                    <img 
+                                        width={"200px"}
+                                        height={"200px"}
+                                        src={this.state.fileURL}
+                                        alt="" />
+                                }
+                                <Button
+                                    variant='outlined'
+                                    component="label"
+                                    startIcon={<InsertPhoto />} 
+                                    sx={{
+                                        marginTop: "10px",
+                                        width: "100%"
+                                    }}>
+                                    Upload Image
+                                    <input 
+                                        type="file"
+                                        id="file"
+                                        onChange={(event) => this.handleFileChosen(event.target.files[0])}
+                                        hidden
+                                    />
+                                </Button>
+                            </Box>
+                            
                             <div className='text-input-layout'>
                                 <Typography variant='h6'>
                                     Meal Name
@@ -215,9 +267,8 @@ export class AddMeal extends React.Component {
                                 </Typography>
                                 {this.showSelectedIngredients()}
                                 <Button 
-                                    variant='text' 
+                                    variant='outlined' 
                                     startIcon={<Add />} 
-                                    className='add-ingredient-button'
                                     onClick={this.handleClickOpen}>
                                     Add Ingredient
                                 </Button>
@@ -242,7 +293,11 @@ export class AddMeal extends React.Component {
                                     className='text-input'/>
                             </div>
 
-                            <input className='form-submit' type="submit" value="Submit" />
+                            <Button
+                                type="submit"
+                                variant="contained">
+                                Submit
+                            </Button>
                         </form>
                     </div>
                 </Container>

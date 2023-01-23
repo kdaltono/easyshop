@@ -21,6 +21,7 @@ import { PrintListMain } from './components/print/print'
 import { LoginBase } from './components/login/login'
 import { Register } from './components/register/register'
 import { configureStore } from '@reduxjs/toolkit'
+import { LoggedOut } from './components/login/loggedout/loggedout'
 
 function Layout() {
     const loggedIn = useSelector((state) => state.user.loggedIn)
@@ -37,17 +38,17 @@ function Layout() {
 function App() {
     const stateLoader = new StateLoader()
 
-    let _store = configureStore({
+    StateLoader._store = configureStore({
         reducer: rootReducer,
         preloadedState: stateLoader.loadState()
     })
 
-    _store.subscribe(() => {
-        stateLoader.saveState(_store.getState())
+    StateLoader._store.subscribe(() => {
+        stateLoader.saveState(StateLoader._store.getState())
     })
 
     return (
-        <Provider store={_store}>
+        <Provider store={StateLoader._store}>
             <HistoryRouter history={history}>
                 <Routes>
                     <Route path="/" element={<Layout />}>
@@ -61,6 +62,7 @@ function App() {
                         <Route path="print/*" element={<PrintListMain />}></Route>
                         <Route path="login" element={<LoginBase />}></Route>
                         <Route path="register" element={<Register />}></Route>
+                        <Route path="loggedout" element={<LoggedOut />}></Route>
                     </Route>
                 </Routes>
             </HistoryRouter>

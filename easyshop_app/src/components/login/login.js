@@ -1,6 +1,6 @@
 import React from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { setKey, setLoggedIn, setUserId, setFullName } from "../../features/user/userSlice"
+import { setKey, setLoggedInToTrue, setUserId, setFullName, setFirstName } from "../../features/user/userSlice"
 import { Button, TextField, Typography } from "@mui/material"
 import { Box } from "@mui/system"
 import { login } from '../../http/rest_api'
@@ -9,23 +9,13 @@ import history from '../../utils/history'
 import Background from '../../res/background.jpg'
 var sha256 = require('js-sha256').sha256
 
-/*function LoginBase(Component) {
-    return function WrappedComponent(props) {
-        const apiKey = () => { return useSelector((state) => state.user.apiKey) }
-        const setKey = (value) => { useDispatch(setKey(value)) }
-
-        <Login 
-            apiKey={apiKey}
-            setKey={setKey}/>
-    }
-}*/
-
 export function LoginBase() {
     const key = useSelector((state) => state.user.apiKey)
     const dispatch = useDispatch()
     const setApiKey = (value) => { dispatch(setKey(value)) }
     const setRUserId = (value) => { dispatch(setUserId(value)) }
     const setRFullName = (value) => { dispatch(setFullName(value)) }
+    const setRFirstName = (value) => { dispatch(setFirstName(value)) }
 
     return (
         <Login 
@@ -33,7 +23,8 @@ export function LoginBase() {
             setKey={setApiKey}
             setUserId={setRUserId}
             setFullName={setRFullName}
-            setLoggedIn={() => dispatch(setLoggedIn())}/>
+            setFirstName={setRFirstName}
+            setLoggedIn={() => dispatch(setLoggedInToTrue())}/>
     )
 }
 
@@ -68,6 +59,7 @@ export class Login extends React.Component {
             this.props.setKey(res.data.token)
             this.props.setUserId(res.data.user_id)
             this.props.setFullName(res.data.full_name)
+            this.props.setFirstName(res.data.first_name)
             this.props.setLoggedIn()
 
             setToken(res.data.token)

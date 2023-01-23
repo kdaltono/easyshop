@@ -31,5 +31,17 @@ services:
       - easyshop_db
     ports:
       - "8080:8080"
+  easyshop_imagehost:
+    container_name: easyshop_imagehost
+    build: ./easyshop_imagehost/
+    depends_on:
+      - easyshop_db
+    links:
+      - easyshop_db
+    ports:
+      - "5001:8080"
+    volumes:
+      - esihdata:/srv/esimghost
 volumes:
   esdbdata:
+  esihdata:

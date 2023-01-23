@@ -1,12 +1,12 @@
 import { Add } from "@mui/icons-material";
-import { Typography, Container, Box, Divider, Menu, List, ListItem, ListItemText, Button, MenuItem } from "@mui/material";
+import { Typography, Container, Box, Divider, Menu, List, ListItem, ListItemText, Button, MenuItem, Skeleton } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { getAllMealData, getAllActiveMealLists, insertNewMealListMeal } from "../../../http/rest_api";
 import './mealviewer.css'
 
 export function MealViewerMain() {
-    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams, ] = useSearchParams();
     const mealId = searchParams.get("mealid")
 
     return (
@@ -24,8 +24,10 @@ export class MealViewer extends React.Component {
             mealData: [],
             mealIngredients: [],
             activeMealLists: [],
-            anchorEl: undefined
+            anchorEl: undefined,
+            imageIsLoaded: false
         }
+        this.handleImageLoaded = this.handleImageLoaded.bind(this)
     }
 
     componentDidMount() {
@@ -42,6 +44,12 @@ export class MealViewer extends React.Component {
         })
     }
 
+    handleImageLoaded = () => {
+        this.setState({
+            imageIsLoaded: true
+        })
+    }
+
     addToShoppingList = (mealList) => {
         insertNewMealListMeal({
             meal_list_id: mealList.meal_list_id,
@@ -52,7 +60,10 @@ export class MealViewer extends React.Component {
     }
 
     onAddToListMenuClose = (mealList) => {
-        this.addToShoppingList(mealList)
+        if (mealList.meal_list_id) {
+            this.addToShoppingList(mealList)
+        }
+
         this.setState({
             anchorEl: undefined
         })
@@ -72,36 +83,69 @@ export class MealViewer extends React.Component {
                     marginTop: '30px'
                 }}>
                     <div className="meal-viewer-action">
-                        <Button
-                            className="add-meal-button"
-                            variant="contained"
-                            endIcon={<Add />}
-                            onClick={this.openAddToListMenu}>
-                            Add to List
-                        </Button>
-                        <Menu
-                            anchorEl={this.state.anchorEl}
-                            open={this.state.anchorEl ? true : false}>
-                            {
-                                (this.state.activeMealLists.length > 0 ? 
-                                this.state.activeMealLists.map((mealList) => {
-                                    return (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                width: "100%",
+                            }}>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    height: "300px",
+                                    position: "relative"
+                                }}>
+                                {!this.state.imageIsLoaded &&
+                                    <Skeleton 
+                                        variant="rectangular"
+                                        width={"100%"}
+                                        height="100%"/>
+                                }
+                                <img 
+                                    src={`http://localhost:5001/easyshop_imagehost/image?mealId=${this.props.mealId}`}                                
+                                    onLoad={this.handleImageLoaded}
+                                    width="100%"
+                                    height={this.state.imageIsLoaded ? "100%" : 0}
+                                    alt=""/>
+                            </Box>
+
+                            <Button
+                                className="add-meal-button"
+                                variant="contained"
+                                endIcon={<Add />}
+                                onClick={this.openAddToListMenu}
+                                sx={{
+                                    marginLeft: "10px",
+                                    marginTop: "10px",
+                                    position: "absolute"
+                                }}>
+                                Add to List
+                            </Button>
+                            <Menu
+                                anchorEl={this.state.anchorEl}
+                                open={this.state.anchorEl ? true : false}
+                                onClose={this.onAddToListMenuClose}>
+                                {
+                                    (this.state.activeMealLists.length > 0 ? 
+                                    this.state.activeMealLists.map((mealList) => {
+                                        return (
+                                            <MenuItem
+                                                onClick={() => this.onAddToListMenuClose(mealList)}
+                                                key={mealList.meal_list_id}>
+                                                {mealList.meal_list_name}
+                                            </MenuItem>
+                                        )
+                                    })
+                                    :
+                                    (
                                         <MenuItem
-                                            onClick={() => this.onAddToListMenuClose(mealList)}
-                                            key={mealList.meal_list_id}>
-                                            {mealList.meal_list_name}
+                                            disabled>
+                                            No active meals!
                                         </MenuItem>
-                                    )
-                                })
-                                :
-                                (
-                                    <MenuItem
-                                        disabled>
-                                        No active meals!
-                                    </MenuItem>
-                                ))
-                            }
-                        </Menu>
+                                    ))
+                                }
+                            </Menu>
+                        </Box>
                     </div>
 
                     <Divider />

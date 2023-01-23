@@ -1,14 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+// TODO: Split this up into multiple slices. Seems like this one is a bit complex
+
 export const userSlice = createSlice({
     name: 'user',
     initialState: {
         apiKey: '',
         loggedIn: false,
         user_id: '',
-        full_name: ''
+        full_name: '',
+        first_name: '',
+        last_name: ''
     },
     reducers: {
+        clearValues: (state) => {
+            console.log("Clearing values from Redux Store")
+            state.apiKey = ''
+            state.loggedIn = false
+            state.user_id = ''
+            state.full_name = ''
+            state.first_name = ''
+            state.last_name = ''
+        },
         clearKey: (state) => {
             state.apiKey = ''
         },
@@ -19,10 +32,10 @@ export const userSlice = createSlice({
         isLoggedIn: (state) => {
             return state.loggedIn
         },
-        setLoggedIn: (state) => {
+        setLoggedInToTrue: (state) => {
             state.loggedIn = true
         },
-        setLoggedOut: (state) => {
+        setLoggedInToFalse: (state) => {
             state.loggedIn = false
         },
         getUserId: (state) => {
@@ -36,6 +49,18 @@ export const userSlice = createSlice({
         },
         setFullName: (state, action) => {
             state.full_name = action.payload
+        },
+        getFirstName: (state) => {
+            return state.first_name
+        },
+        setFirstName: (state, action) => {
+            state.first_name = action.payload
+        },
+        getLastName: (state) => {
+            return state.last_name
+        },
+        setLastName: (state, action) => {
+            state.last_name = action.payload
         }
     }
 })
@@ -44,12 +69,17 @@ export const {
     clearKey, 
     setKey, 
     isLoggedIn, 
-    setLoggedIn, 
-    setLoggedOut, 
+    setLoggedInToTrue, 
+    setLoggedInToFalse, 
     getUserId, 
     setUserId, 
     getFullName, 
-    setFullName 
+    setFullName ,
+    getFirstName,
+    setFirstName,
+    getLastName,
+    setLastName,
+    clearValues
 } = userSlice.actions
 
 export default userSlice.reducer

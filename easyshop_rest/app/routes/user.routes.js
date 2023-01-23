@@ -20,7 +20,9 @@ module.exports = app => {
                         token: tokenObject.token,
                         expiresIn: tokenObject.expires,
                         user_id: tokenObject.user_id,
-                        full_name: tokenObject.full_name
+                        full_name: tokenObject.full_name,
+                        first_name: tokenObject.first_name,
+                        last_name: tokenObject.last_name
                     })
                 } else {
                     console.log('/login: login attempt failed')

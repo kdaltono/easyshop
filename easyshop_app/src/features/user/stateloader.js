@@ -37,9 +37,12 @@ class StateLoader {
     }
 
     static initializeState() {
-        return configureStore({
+        let state = configureStore({
             reducer: rootreducer
         }).getState()
+
+        console.log("initState(): " + JSON.stringify(state))
+        return state
     }
 }
 

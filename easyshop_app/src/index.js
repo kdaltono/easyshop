@@ -44,6 +44,7 @@ function App() {
     })
 
     StateLoader._store.subscribe(() => {
+        console.log(JSON.stringify(StateLoader._state))
         stateLoader.saveState(StateLoader._store.getState())
     })
 

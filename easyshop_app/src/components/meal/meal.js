@@ -24,9 +24,12 @@ export class Meal extends React.Component {
             }
         })
         getAllActiveMealLists().then((res) => {
-            this.setState({
-                activeMealLists: res.data
-            })
+            console.log("Meal list: " + JSON.stringify(res))
+            if (res.error !== "ERR") {
+                this.setState({
+                    activeMealLists: res.data
+                })
+            }
         })
     }
 

@@ -1,3 +1,12 @@
+create table user (
+	user_id INTEGER NOT NULL auto_increment,
+    username VARCHAR(30) NOT NULL,
+    first_name VARCHAR(30) NOT NULL,
+    last_name VARCHAR(30) NOT NULL,
+    current_password binary(32),
+    PRIMARY KEY (user_id)
+);
+
 CREATE TABLE meal (
     meal_id INTEGER AUTO_INCREMENT NOT NULL,
     meal_title VARCHAR(30) NOT NULL,
@@ -5,7 +14,9 @@ CREATE TABLE meal (
     creation_date DATETIME DEFAULT current_timestamp,
     updated_date DATETIME DEFAULT current_timestamp ON UPDATE current_timestamp,
     meal_recipe TEXT,
-    PRIMARY KEY (meal_id)
+    user_id INTEGER NOT NULL,
+    PRIMARY KEY (meal_id),
+    FOREIGN KEY user_id REFERENCES user(user_id)
 );
 
 CREATE TABLE ingredient_category (
@@ -49,15 +60,9 @@ create table meal_list (
     meal_list_name VARCHAR(20),
     creation_dstamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY(meal_list_id)
-);
-
-create table meal_list (
-	meal_list_id INTEGER NOT NULL auto_increment,
-    meal_list_name VARCHAR(20),
-    creation_dstamp datetime NOT NULL default current_timestamp(),
-    is_active BOOLEAN default 1,
-    PRIMARY KEY (meal_list_id)
+    user_id INTEGER NOT NULL,
+    PRIMARY KEY(meal_list_id),
+    FOREIGN KEY user_id REFERENCES user(user_id)
 );
 
 create table meal_list_meal (
@@ -77,17 +82,17 @@ create table measure_conversion (
     multiplier DECIMAL(15,5) NOT NULL,
     to_measure_id INTEGER NOT NULL,
     UNIQUE KEY (from_measure_id, to_measure_id),
-    FOREIGN KEY (from_measure_id) references measure(measure_id),
-    FOREIGN KEY (to_measure_id) references measure(measure_id)
+    FOREIGN KEY (from_measure_id) references measures(measure_id),
+    FOREIGN KEY (to_measure_id) references measures(measure_id)
 );
 
-insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Liter", "L", TRUE);
-insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Milliliter", "ml", TRUE);
+insert into measures (measure_name, measure_abbr, is_liquid_measure) values ("Liter", "L", TRUE);
+insert into measures (measure_name, measure_abbr, is_liquid_measure) values ("Milliliter", "ml", TRUE);
 insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (1, 1000, 2);
 insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (2, 0.001, 1);
 
-insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Kilogram", "kg", FALSE);
-insert into measure (measure_name, measure_abbr, is_liquid_measure) values ("Gram", "g", FALSE);
+insert into measures (measure_name, measure_abbr, is_liquid_measure) values ("Kilogram", "kg", FALSE);
+insert into measures (measure_name, measure_abbr, is_liquid_measure) values ("Gram", "g", FALSE);
 insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (3, 1000, 4);
 insert into measure_conversion (from_measure_id, multiplier, to_measure_id) values (4, 0.001, 3);
 

@@ -55,6 +55,7 @@ export class Login extends React.Component {
 
     submit = (event) => {
         login(this.state.username, sha256(this.state.password).toUpperCase()).then((res) => {
+            console.log("Login Response: " + JSON.stringify(res))
             console.log("React Redux API Key: " + this.props.apiKey)
             this.props.setKey(res.data.token)
             this.props.setUserId(res.data.user_id)

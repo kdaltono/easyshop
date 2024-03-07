@@ -50,6 +50,10 @@ function App() {
 
     return (
         <Provider store={StateLoader._store}>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+            <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&display=swap" rel="stylesheet"/>
             <HistoryRouter history={history}>
                 <Routes>
                     <Route path="/" element={<Layout />}>

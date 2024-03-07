@@ -1,3 +1,4 @@
+![Easy Shop Logo](/easyshop_app/src/res/logo.png)
 # EasyShop
 The EasyShop project is designed to create, share and find recipes and then easily generate shopping lists for them!
 

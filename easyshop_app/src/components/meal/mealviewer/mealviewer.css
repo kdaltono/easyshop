@@ -1,21 +1,4 @@
-.meal-viewer-header {
-    padding-bottom: 20px;
-    padding-top: 20px;
-}
-
-.meal-viewer-body {
-    padding-top: 20px;
-}
-
-.meal-viewer-ingredients {
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.meal-viewer-action {
-    width: 100%;
-    padding-bottom: 20px;
-    display: flex;
-    flex-direction: row;    
-    justify-content: flex-end;
+.meal-image {
+    position: relative;
+    transform: translateY(-25%);
 }

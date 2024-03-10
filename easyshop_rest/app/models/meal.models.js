@@ -9,7 +9,7 @@ const Meal = function(meal) {
 }
 
 Meal.getMealData = (mealId, result) => {
-    const query = "select meal_id, meal_title, meal_desc, creation_date, meal_recipe, updated_date from meal where meal_id = ?"
+    const query = "select m.meal_id, m.meal_title, m.meal_desc, m.creation_date, m.meal_recipe, m.updated_date, u.username from meal m inner join user u on (m.user_id = u.user_id) where m.meal_id = ?"
 
     sql.query(query, mealId, (err, res) => {
         if (err) {

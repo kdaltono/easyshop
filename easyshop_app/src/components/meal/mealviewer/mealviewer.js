@@ -1,5 +1,5 @@
-import { Add } from "@mui/icons-material";
-import { Typography, Container, Box, Divider, Menu, List, ListItem, ListItemText, Button, MenuItem, Skeleton } from "@mui/material";
+import { AddShoppingCart } from "@mui/icons-material";
+import { Typography, Container, Box, Menu, List, ListItem, ListItemText, Button, MenuItem, Skeleton } from "@mui/material";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { getAllMealData, getAllActiveMealLists, insertNewMealListMeal } from "../../../http/rest_api";
@@ -19,8 +19,6 @@ export function MealViewerMain() {
 }
 
 export class MealViewer extends React.Component {
-    // Update the layout/fonts used here
-
     constructor(props) {
         super(props)
         this.state = {
@@ -53,7 +51,175 @@ export class MealViewer extends React.Component {
         })
     }
 
-    addToShoppingList = (mealList) => {
+    render() {
+        return (
+            <Container 
+                maxWidth='md'>
+                <Box sx={{
+                    marginTop: '30px'
+                }}>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            backgroundColor: '#6B8E23',
+                            borderRadius: '15px'
+                        }}>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                width: "40%"
+                            }}>
+                            {/* This box is for the image, and then the ingredients */}
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    width: '100%',
+                                    height: '350px'
+                                }}>
+                                <Box
+                                    sx={{
+                                        width: "100%",
+                                        height: "200px",
+                                        position: "relative",
+                                        backgroundColor: 'gray',
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        borderTopLeftRadius: '15px'
+                                    }}>
+                                    {!this.state.imageIsLoaded &&
+                                        <Skeleton 
+                                            variant="rectangular"
+                                            width={"100%"}
+                                            height="auto"
+                                            sx={{
+                                                borderTopLeftRadius: '15px'
+                                            }}/>
+                                    }
+                                    <Box
+                                        sx={{
+                                            width: '100%',
+                                            height: '100%',
+                                            overflow: 'hidden',
+                                            borderTopLeftRadius: '15px'
+                                        }}>
+                                        <img 
+                                            src={`http://localhost:5001/easyshop_imagehost/image?mealId=${this.props.mealId}`}                                
+                                            onLoad={this.handleImageLoaded}
+                                            class="meal-image"
+                                            width="100%"
+                                            height={this.state.imageIsLoaded ? "auto" : 0}
+                                            alt=""/>
+                                    </Box>
+                                </Box>
+
+                                <AddToListButton 
+                                    activeMealLists={this.state.activeMealLists}
+                                    />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                width: '60%',
+                                marginLeft: '20px',
+                                paddingTop: '20px'
+                            }}>
+                            <Typography 
+                                sx={titleFont}>
+                                {this.state.mealData.meal_title}
+                            </Typography>
+                            <Typography
+                                sx={detailFont}>
+                                {this.state.mealData.username}
+                            </Typography>
+                            <Typography 
+                                sx={detailFont}>
+                                {this.state.mealData.meal_desc}
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            width: '100%',
+                            paddingTop: '40px'
+                        }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                width: '30%',
+                                paddingLeft: '10px'
+                            }}>
+                            <Typography 
+                                variant="h5"
+                                sx={subheadingFont}>
+                                Ingredients
+                            </Typography>
+                                <List
+                                    dense={true}>
+                                {
+                                    (this.state.mealIngredients.length > 0 ? 
+                                    this.state.mealIngredients.map((ingredient, index) => {
+                                        return (
+                                            <ListItem
+                                                key={`${index}${ingredient.ingredient_title}${ingredient.ingredient_qty}`}>
+                                                <ListItemText
+                                                    style={{ paddingTop: '0px', paddingBottom: '0px' }}
+                                                    primary={
+                                                        <Typography 
+                                                            variant="p"
+                                                            sx={detailFont}>
+                                                            {`${ingredient.ingredient_qty}${ingredient.measure_abbr} x ${ingredient.ingredient_title}`}
+                                                        </Typography>}/>
+                                            </ListItem>
+                                        )
+                                    }) 
+                                    :
+                                    (
+                                        <ListItem>
+                                            <ListItemText 
+                                                primary={"No ingredients to show!"}/>   
+                                        </ListItem>
+                                    ))
+                                }
+                                </List>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }}>
+                            <Typography 
+                                variant="h5"
+                                sx={subheadingFont}>
+                                Recipe
+                            </Typography>
+                            <Typography 
+                                variant="p" 
+                                style={{ whiteSpace: 'pre-wrap' }}
+                                sx={detailFont}>
+                                {this.state.mealData.meal_recipe}
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
+            </Container>
+        )
+    }
+}
+
+function AddToListButton(props) {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const addToShoppingList = (mealList) => {
         insertNewMealListMeal({
             meal_list_id: mealList.meal_list_id,
             meal_id: this.props.mealId
@@ -62,177 +228,54 @@ export class MealViewer extends React.Component {
         })
     }
 
-    onAddToListMenuClose = (mealList) => {
+    const onAddToListMenuClose = (mealList) => {
         if (mealList.meal_list_id) {
-            this.addToShoppingList(mealList)
+            addToShoppingList(mealList)
         }
-
-        this.setState({
-            anchorEl: undefined
-        })
+        setAnchorEl(undefined)
     }
 
-    openAddToListMenu = (event) => {
-        this.setState({
-            anchorEl: event.currentTarget
-        })
+    const openAddToListMenu = (event) => {
+        setAnchorEl(event.currentTarget)
     }
 
-    render() {
-        return (
-            <Container 
-                maxWidth='md'>
-                <Box sx={{
-                    marginTop: '30px'
+    return (
+        <Box>        
+            <Button
+                className="add-meal-button"
+                variant="contained"
+                endIcon={<AddShoppingCart />}
+                onClick={openAddToListMenu}
+                sx={{
+                    marginLeft: "10px",
+                    marginTop: "10px"
                 }}>
-                    <div className="meal-viewer-action">
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                width: "100%",
-                            }}>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    width: '100%'
-                                }}>
-                                <Box
-                                    sx={{
-                                        width: "50%",
-                                        height: "300px",
-                                        position: "relative"
-                                    }}>
-                                    {!this.state.imageIsLoaded &&
-                                        <Skeleton 
-                                            variant="rectangular"
-                                            width={"100%"}
-                                            height="100%"/>
-                                    }
-                                    <img 
-                                        src={`http://localhost:5001/easyshop_imagehost/image?mealId=${this.props.mealId}`}                                
-                                        onLoad={this.handleImageLoaded}
-                                        width="100%"
-                                        height={this.state.imageIsLoaded ? "100%" : 0}
-                                        alt=""/>                                
-                                </Box>
-                                <Box
-                                    sx={{
-                                        width: '50%',
-                                        marginLeft: '20px'
-                                    }}>
-                                    <Typography 
-                                        variant="h5"
-                                        sx={titleFont}>
-                                        {this.state.mealData.meal_title}
-                                    </Typography>
-                                    <Typography 
-                                        variant="p"
-                                        sx={detailFont}>
-                                        {this.state.mealData.meal_desc}
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            <Button
-                                className="add-meal-button"
-                                variant="contained"
-                                endIcon={<Add />}
-                                onClick={this.openAddToListMenu}
-                                sx={{
-                                    marginLeft: "10px",
-                                    marginTop: "10px",
-                                    position: "absolute"
-                                }}>
-                                Add to List
-                            </Button>
-                            <Menu
-                                anchorEl={this.state.anchorEl}
-                                open={this.state.anchorEl ? true : false}
-                                onClose={this.onAddToListMenuClose}>
-                                {
-                                    (this.state.activeMealLists.length > 0 ? 
-                                    this.state.activeMealLists.map((mealList) => {
-                                        return (
-                                            <MenuItem
-                                                onClick={() => this.onAddToListMenuClose(mealList)}
-                                                key={mealList.meal_list_id}>
-                                                {mealList.meal_list_name}
-                                            </MenuItem>
-                                        )
-                                    })
-                                    :
-                                    (
-                                        <MenuItem
-                                            disabled>
-                                            No active meals!
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Menu>
-                        </Box>
-                    </div>
-
-                    <Divider />
-
-                    
-
-                    <Divider />
-
-                    <div className="meal-viewer-ingredients">
-                        <Typography 
-                            variant="h5"
-                            sx={subheadingFont}>
-                            Ingredients
-                        </Typography>
-                            <List
-                                dense={true}>
-                            {
-                                (this.state.mealIngredients.length > 0 ? 
-                                this.state.mealIngredients.map((ingredient, index) => {
-                                    return (
-                                        <ListItem
-                                            key={`${index}${ingredient.ingredient_title}${ingredient.ingredient_qty}`}>
-                                            <ListItemText
-                                                style={{ paddingTop: '0px', paddingBottom: '0px' }}
-                                                primary={
-                                                    <Typography 
-                                                        variant="p"
-                                                        sx={detailFont}>
-                                                        {`${ingredient.ingredient_qty}${ingredient.measure_abbr} x ${ingredient.ingredient_title}`}
-                                                    </Typography>}/>
-                                        </ListItem>
-                                    )
-                                }) 
-                                :
-                                (
-                                    <ListItem>
-                                        <ListItemText 
-                                            primary={"No ingredients to show!"}/>   
-                                    </ListItem>
-                                ))
-                            }
-                            </List>
-                    </div>
-
-                    <Divider />
-
-                    <div className="meal-viewer-body">
-                        <Typography 
-                            variant="h5"
-                            sx={subheadingFont}>
-                            Recipe
-                        </Typography>
-                        <Typography 
-                            variant="p" 
-                            style={{ whiteSpace: 'pre-wrap' }}
-                            sx={detailFont}>
-                            {this.state.mealData.meal_recipe}
-                        </Typography>
-                    </div>
-                </Box>
-            </Container>
-        )
-    }
+                Add to List
+            </Button>
+            <Menu
+                anchorEl={anchorEl}
+                open={anchorEl ? true : false}
+                onClose={onAddToListMenuClose}>
+                {
+                    (props.activeMealLists.length > 0 ? 
+                    props.activeMealLists.map((mealList) => {
+                        return (
+                            <MenuItem
+                                onClick={() => onAddToListMenuClose(mealList)}
+                                key={mealList.meal_list_id}>
+                                {mealList.meal_list_name}
+                            </MenuItem>
+                        )
+                    })
+                    :
+                    (
+                        <MenuItem
+                            disabled>
+                            No active meals!
+                        </MenuItem>
+                    ))
+                }
+            </Menu>
+        </Box>
+    )
 }

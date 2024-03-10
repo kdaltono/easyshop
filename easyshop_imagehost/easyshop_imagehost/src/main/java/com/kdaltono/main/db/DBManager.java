@@ -17,7 +17,7 @@ public class DBManager {
 	
 	public DBManager(String language, String url, String port, String username, String password) {
 		this.language = language;
-		this.url = url;
+		this.url = url;	
 		this.port = port;
 		this.username = username;
 		this.password = password;

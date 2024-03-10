@@ -3,6 +3,7 @@ import { insertMeal, insertMealIngredients, uploadImage } from '../../http/rest_
 import { Typography, Container, Divider, Input, Button, List, ListItem, IconButton, Box } from '@mui/material';
 import { Add, Delete, InsertPhoto } from '@mui/icons-material'
 import { AddIngredientForm } from './addingredients/addingredients';
+import { titleFont, subheadingFont, bigDetailFont } from '../../utils/textStyling';
 import './addmeal.css'
 
 export class AddMeal extends React.Component {
@@ -196,8 +197,16 @@ export class AddMeal extends React.Component {
             <div className='add-meal-form-outer'>
                 <Container className='add-meal-form'>
                     <div className='form-header'>
-                        <Typography variant="h5">Add a New Meal</Typography>
-                        <Typography variant="p">Add a new meal to add to your shopping lists. A meal consists of: the name, a short description, the recipe, and all of the ingredients.</Typography>    
+                        <Typography 
+                            variant="h5"
+                            sx={titleFont}>
+                            Add a New Recipe!
+                        </Typography>
+                        <Typography 
+                            variant="p"
+                            sx={bigDetailFont}>
+                            Add a new meal to add to your shopping lists. A meal consists of: the name, a short description, the recipe, and all of the ingredients.
+                        </Typography>    
                     </div>
 
                     <Divider/>
@@ -225,7 +234,7 @@ export class AddMeal extends React.Component {
                                         marginTop: "10px",
                                         width: "100%"
                                     }}>
-                                    Upload Image
+                                    Upload An Image
                                     <input 
                                         type="file"
                                         id="file"
@@ -236,7 +245,9 @@ export class AddMeal extends React.Component {
                             </Box>
                             
                             <div className='text-input-layout'>
-                                <Typography variant='h6'>
+                                <Typography 
+                                    variant='h6'
+                                    sx={subheadingFont}>
                                     Meal Name
                                 </Typography>
                                 <Input 
@@ -249,7 +260,9 @@ export class AddMeal extends React.Component {
                             </div>
 
                             <div className='text-input-layout'>
-                                <Typography variant='h6'>
+                                <Typography 
+                                    variant='h6'
+                                    sx={subheadingFont}>
                                     Description
                                 </Typography>
                                 <Input 
@@ -262,7 +275,9 @@ export class AddMeal extends React.Component {
                             </div>
 
                             <div className='text-input-layout'>
-                                <Typography variant='h6'>
+                                <Typography 
+                                    variant='h6'
+                                    sx={subheadingFont}>
                                     Ingredients
                                 </Typography>
                                 {this.showSelectedIngredients()}
@@ -280,7 +295,9 @@ export class AddMeal extends React.Component {
                             </div>
 
                             <div className='text-input-layout'>
-                                <Typography variant='h6'>
+                                <Typography     
+                                    variant='h6'
+                                    sx={subheadingFont}>
                                     Recipe
                                 </Typography>
                                 <Input 

@@ -5,7 +5,7 @@ module.exports = errorResponseHandler = (res, err, input, model) => {
                 err: `404: Could not find ${model} with data: ${input}`
             })
         } else {
-            res.status(404).send({
+            res.status(204).send({
                 err: `404: Could not find data for ${model}`
             })
         }

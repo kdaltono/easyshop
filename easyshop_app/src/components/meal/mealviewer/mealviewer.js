@@ -4,6 +4,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { getAllMealData, getAllActiveMealLists, insertNewMealListMeal } from "../../../http/rest_api";
 import './mealviewer.css'
+import { titleFont, subheadingFont, detailFont } from "../../../utils/textStyling";
 
 export function MealViewerMain() {
     let [searchParams, ] = useSearchParams();
@@ -18,6 +19,8 @@ export function MealViewerMain() {
 }
 
 export class MealViewer extends React.Component {
+    // Update the layout/fonts used here
+
     constructor(props) {
         super(props)
         this.state = {
@@ -91,22 +94,45 @@ export class MealViewer extends React.Component {
                             }}>
                             <Box
                                 sx={{
-                                    width: "100%",
-                                    height: "300px",
-                                    position: "relative"
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    width: '100%'
                                 }}>
-                                {!this.state.imageIsLoaded &&
-                                    <Skeleton 
-                                        variant="rectangular"
-                                        width={"100%"}
-                                        height="100%"/>
-                                }
-                                <img 
-                                    src={`http://localhost:5001/easyshop_imagehost/image?mealId=${this.props.mealId}`}                                
-                                    onLoad={this.handleImageLoaded}
-                                    width="100%"
-                                    height={this.state.imageIsLoaded ? "100%" : 0}
-                                    alt=""/>
+                                <Box
+                                    sx={{
+                                        width: "50%",
+                                        height: "300px",
+                                        position: "relative"
+                                    }}>
+                                    {!this.state.imageIsLoaded &&
+                                        <Skeleton 
+                                            variant="rectangular"
+                                            width={"100%"}
+                                            height="100%"/>
+                                    }
+                                    <img 
+                                        src={`http://localhost:5001/easyshop_imagehost/image?mealId=${this.props.mealId}`}                                
+                                        onLoad={this.handleImageLoaded}
+                                        width="100%"
+                                        height={this.state.imageIsLoaded ? "100%" : 0}
+                                        alt=""/>                                
+                                </Box>
+                                <Box
+                                    sx={{
+                                        width: '50%',
+                                        marginLeft: '20px'
+                                    }}>
+                                    <Typography 
+                                        variant="h5"
+                                        sx={titleFont}>
+                                        {this.state.mealData.meal_title}
+                                    </Typography>
+                                    <Typography 
+                                        variant="p"
+                                        sx={detailFont}>
+                                        {this.state.mealData.meal_desc}
+                                    </Typography>
+                                </Box>
                             </Box>
 
                             <Button
@@ -150,19 +176,14 @@ export class MealViewer extends React.Component {
 
                     <Divider />
 
-                    <div className="meal-viewer-header">
-                        <Typography variant="h5">
-                            {this.state.mealData.meal_title}
-                        </Typography>
-                        <Typography variant="p">
-                            {this.state.mealData.meal_desc}
-                        </Typography>
-                    </div>
+                    
 
                     <Divider />
 
                     <div className="meal-viewer-ingredients">
-                        <Typography variant="h5">
+                        <Typography 
+                            variant="h5"
+                            sx={subheadingFont}>
                             Ingredients
                         </Typography>
                             <List
@@ -176,8 +197,10 @@ export class MealViewer extends React.Component {
                                             <ListItemText
                                                 style={{ paddingTop: '0px', paddingBottom: '0px' }}
                                                 primary={
-                                                    <Typography variant="p">
-                                                        {`${ingredient.ingredient_qty} x ${ingredient.ingredient_title}`}
+                                                    <Typography 
+                                                        variant="p"
+                                                        sx={detailFont}>
+                                                        {`${ingredient.ingredient_qty}${ingredient.measure_abbr} x ${ingredient.ingredient_title}`}
                                                     </Typography>}/>
                                         </ListItem>
                                     )
@@ -196,10 +219,15 @@ export class MealViewer extends React.Component {
                     <Divider />
 
                     <div className="meal-viewer-body">
-                        <Typography variant="h5">
+                        <Typography 
+                            variant="h5"
+                            sx={subheadingFont}>
                             Recipe
                         </Typography>
-                        <Typography variant="p" style={{ whiteSpace: 'pre-wrap' }}>
+                        <Typography 
+                            variant="p" 
+                            style={{ whiteSpace: 'pre-wrap' }}
+                            sx={detailFont}>
                             {this.state.mealData.meal_recipe}
                         </Typography>
                     </div>

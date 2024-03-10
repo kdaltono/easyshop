@@ -6,6 +6,7 @@
 
 .category-list {
     width: 50%;
+    overflow-y: scroll;
 }
 
 .dialog-layout {
@@ -17,7 +18,7 @@
 .dialog-content {
     display: flex;
     flex-direction: column;
-    overflow-y: hidden !important;
+    overflow-y: scroll;
 }
 
 .ingredient-list {

@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogTitle, Button, Typography, TextField, MenuItem, FormControlLabel, Checkbox, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, Button, Box, Typography, TextField, MenuItem, FormControlLabel, Checkbox, FormControl, RadioGroup, Radio, FormLabel } from '@mui/material';
 import './createingredients.css'
 import { insertNewIngredient } from "../../../http/rest_api";
 import React from "react";
@@ -107,6 +107,9 @@ export class CreateIngredientsForm extends React.Component {
                     sx={{
                         height: '100%'
                     }}>
+                    <Box>
+                        
+                    </Box>
                     <div className='form-layout'>
                         <div className='input-section'>
                             <Typography

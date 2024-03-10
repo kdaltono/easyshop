@@ -30,8 +30,8 @@ Meal.getMealData = (mealId, result) => {
 
 Meal.getMealIngredients = (mealId, result) => {
     const query = "select "
-	+ "m.meal_title, i.ingredient_title, mi.ingredient_qty "
-    + "from meal_ingredients mi inner join meal m on (mi.meal_id = m.meal_id) inner join ingredients i on (mi.ingredient_id = i.ingredient_id) "
+	+ "m.meal_title, i.ingredient_title, mi.ingredient_qty, me.measure_abbr "
+    + "from meal_ingredients mi inner join meal m on (mi.meal_id = m.meal_id) inner join ingredients i on (mi.ingredient_id = i.ingredient_id) inner join measures me on (mi.measure_id = me.measure_id) "
     + "where m.meal_id = ?"
 
     sql.query(query, mealId, (err, res) => {

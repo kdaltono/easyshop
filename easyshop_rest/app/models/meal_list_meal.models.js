@@ -7,7 +7,7 @@ const MealListMeal = function (mealListMeal) {
 }
 
 MealListMeal.insertNewMealListMeal = (mealListMealData, result) => {
-    var query = 'insert into meal_list_meal values (?, ?)'
+    var query = 'call insert_into_meal_list_meal(?, ?)'
 
     sql.query(query, [mealListMealData.meal_list_id, mealListMealData.meal_id], (err, res) => {
         if (err) {

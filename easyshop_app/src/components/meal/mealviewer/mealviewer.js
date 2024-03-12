@@ -72,7 +72,6 @@ export class MealViewer extends React.Component {
                                 flexDirection: "row",
                                 width: "40%"
                             }}>
-                            {/* This box is for the image, and then the ingredients */}
                             <Box
                                 sx={{
                                     display: 'flex',

@@ -7,7 +7,7 @@ const MealIngredient = function(mealIngredient) {
 }
 
 MealIngredient.insertMealIngredient = (mealIngredient, result) => {
-    const query = "insert into meal_ingredients(meal_id, ingredient_id, ingredient_qty, measure_id) values (?, ?, ?, ?)"
+    const query = "call insert_meal_ingredient(?, ?, ?, ?)"
 
     sql.query(query, [mealIngredient.meal_id, mealIngredient.ingredient_id, mealIngredient.ingredient_qty, mealIngredient.measure_id], (err, res) => {
         if (err) {

@@ -5,6 +5,7 @@ module.exports = (app) => {
     app.get('/m/all', meal.getAllMeals)
     app.get('/m/:mealId', meal.getMealIngredients)
     app.get('/ma/:mealId', meal.getAllMealData)
+    app.get('/m/u/:userId', meal.getAllMealsByUserId)
 
     app.post('/m', passport.authenticate('jwt', { session: false }), meal.insertNewMeal)
 }

@@ -9,7 +9,7 @@ const User = function(user) {
 }
 
 User.findByUsername = (username, result) => {
-    const query = "select user_id, username, first_name, last_name, upper(hex(current_password)) as current_password from user where username = ?"
+    const query = "call get_user_from_username(?)"
 
     sql.query(query, username, (err, res) => {
         if (err) {
@@ -31,7 +31,7 @@ User.findByUsername = (username, result) => {
 User.checkUserDetailsExist = (username, result) => {
     // Check if user exists, if not return a value to tell the client and the /register route 
     // that the user already exists
-    const query = "select case when count(*) = 1 then true else false end as found_user from user u where u.username = ?"
+    const query = "call get_user_exists_from_username(?)"
 
     sql.query(query, username, (err, res) => {
         if (err) {
@@ -51,7 +51,7 @@ User.checkUserDetailsExist = (username, result) => {
 }
 
 User.insertUser = (user, result) => {
-    const query = "insert into user (username, first_name, last_name, current_password) values (?, ?, ?, UNHEX(?))"
+    const query = "call insert_user(?, ?, ?, UNHEX(?))"
 
     sql.query(query, [user.username, user.first_name, user.last_name, user.password], (err, res) => {
         if (err) {

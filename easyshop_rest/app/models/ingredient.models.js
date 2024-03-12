@@ -9,8 +9,7 @@ const Ingredient = function(ingredient) {
 }
 
 Ingredient.getIngredients = (result) => {
-    const query = "select i.ingredient_id, i.ingredient_category_id, i.ingredient_title, i.ingredient_desc, i.measure_type_id " +
-    "from ingredients i"
+    const query = "call get_all_ingredients()"
     
     sql.query(query, (err, res) => {
         if (err) {
@@ -30,10 +29,7 @@ Ingredient.getIngredients = (result) => {
 }
 
 Ingredient.getIngredientById = (ingredientId, result) => {
-    const query = "select "
-    + "ingredient_id, ingredient_title, ingredient_desc, creation_date, updated_date, measure_type_id "
-    + "from ingredients "
-    + "where ingredient_id = ?"
+    const query = "call get_ingredient_by_ingredient_id(?)"
 
     sql.query(query, ingredientId, (err, res) => {
         if (err) {
@@ -53,7 +49,7 @@ Ingredient.getIngredientById = (ingredientId, result) => {
 }
 
 Ingredient.insertNewIngredient = (ingredient, jwt_user_id, result) => {
-    const query = "insert into ingredients (ingredient_title, ingredient_desc, ingredient_category_id, user_id, measure_type_id) values (?, ?, ?, ?, ?)"
+    const query = "call insert_ingredient(?, ?, ?, ?, ?)"
 
     sql.query(query, [ingredient.ingredient_title, ingredient.ingredient_desc, ingredient.ingredient_category_id, jwt_user_id, ingredient.measure_type_id], (err, res) => {
         if (err) {

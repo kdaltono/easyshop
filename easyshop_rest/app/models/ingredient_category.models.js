@@ -6,7 +6,7 @@ const IngredientCategory = function(ingredientCategory) {
 }
 
 IngredientCategory.getAllCategories = (result) => {
-    const query = "select ingredient_category_id, ingredient_category_name from ingredient_category"
+    const query = "call get_ingredient_categories()"
 
     sql.query(query, (err, res) => {
         if (err) {

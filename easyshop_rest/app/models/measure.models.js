@@ -8,7 +8,7 @@ const Measure = function(measure) {
 }
 
 Measure.getMeasures = (result) => {
-    const query = "select * from measures"
+    const query = "call get_measures()"
 
     sql.query(query, (err, res) => {
         if (err) {
@@ -28,7 +28,7 @@ Measure.getMeasures = (result) => {
 }
 
 Measure.getUnitMeasure = (result) => {
-    const query = "select measure_id from measures where measure_type_id = 'U'"
+    const query = "call get_unit_measure()"
 
     sql.query(query, (err, res) => {
         if (err) {

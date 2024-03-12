@@ -9,7 +9,7 @@ const Meal = function(meal) {
 }
 
 Meal.getMealData = (mealId, result) => {
-    const query = "select m.meal_id, m.meal_title, m.meal_desc, m.creation_date, m.meal_recipe, m.updated_date, u.username from meal m inner join user u on (m.user_id = u.user_id) where m.meal_id = ?"
+    const query = "call get_meal_by_meal_id(?)"
 
     sql.query(query, mealId, (err, res) => {
         if (err) {
@@ -29,10 +29,7 @@ Meal.getMealData = (mealId, result) => {
 }
 
 Meal.getMealIngredients = (mealId, result) => {
-    const query = "select "
-	+ "m.meal_title, i.ingredient_title, mi.ingredient_qty, me.measure_abbr "
-    + "from meal_ingredients mi inner join meal m on (mi.meal_id = m.meal_id) inner join ingredients i on (mi.ingredient_id = i.ingredient_id) inner join measures me on (mi.measure_id = me.measure_id) "
-    + "where m.meal_id = ?"
+    const query = "call get_meal_ingredients(?)"
 
     sql.query(query, mealId, (err, res) => {
         if (err) {
@@ -52,9 +49,7 @@ Meal.getMealIngredients = (mealId, result) => {
 }
 
 Meal.getAllMeals = (result) => {
-    const query = "select "
-    + "meal_id, meal_title, meal_desc, creation_date, updated_date "
-    + "from meal"
+    const query = "call get_all_meals()"
 
     sql.query(query, (err, res) => {
         if (err) {
@@ -73,10 +68,30 @@ Meal.getAllMeals = (result) => {
     })
 }
 
-Meal.insertNewMeal = (mealData, jwt_user_id, result) => {
-    const query = "insert into meal(meal_title, meal_desc, user_id, meal_recipe) values (?, ?, ?, ?)"
+Meal.getAllMealsByUserId = (userId, result) => {
+    const query = "call get_meals_by_user_id(?)"
 
-    sql.query(query, [mealData.meal_title, mealData.meal_desc, jwt_user_id, mealData.meal_recipe], (err, res) => {
+    // TODO -> Finish this
+    sql.query(query, userId, (err, res) => {
+        if (err) {
+            console.log("Error at Meal.getAllMealsByUserId: " + err)
+            result(err, null)
+            return
+        }
+
+        if (res.length) {
+            result(null, res)
+            return
+        }
+
+        result({kind: "not_found"}, null)
+    })
+}
+
+Meal.insertNewMeal = (mealData, jwt_user_id, result) => {
+    const query = "call insert_meal(?, ?, ?, ?)"
+
+    sql.query(query, [mealData.meal_title, mealData.meal_desc, mealData.meal_recipe, jwt_user_id], (err, res) => {
         if (err) {
             console.log("Error: " + err)
             result(err, null)

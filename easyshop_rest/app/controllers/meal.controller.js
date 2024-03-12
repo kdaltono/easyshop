@@ -88,6 +88,25 @@ exports.getAllMeals = (req, res) => {
     })
 }
 
+exports.getAllMealsByUserId = (req, res) => {
+    Meal.getAllMealsByUserId(req.params.userId, (err, data) => {
+        if (err) {
+            if (err.kind === "not_found") {
+                res.status(404).send({
+                    err: 'Could not find any Meals from User ID ' + req.params.userId
+                })
+            } else {
+                res.status(500).send({
+                    err: 'Error retrieving data. ',
+                    msg: err
+                })
+            }
+        } else {
+            res.send(data)
+        }
+    })
+}
+
 exports.insertNewMeal = (req, res) => {
     const userContent = getUserContentFromPayload(req.header('Authorization'))
 
